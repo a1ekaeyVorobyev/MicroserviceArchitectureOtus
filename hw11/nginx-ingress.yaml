@@ -1,0 +1,12 @@
+controller:
+  ingressClass: nginx-m
+  ingressClassResource:
+    name: nginx-m
+    controllerValue: "k8s.io/ingress-nginx"
+  service:
+    type: NodePort
+    nodePorts:
+      http: 30080
+      https: 30443
+  extraArgs:
+    enable-ssl-passthrough: true
