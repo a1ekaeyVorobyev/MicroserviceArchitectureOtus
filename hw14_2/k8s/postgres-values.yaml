@@ -1,0 +1,8 @@
+auth:
+  username: user
+  password: password
+  database: users
+
+primary:
+  persistence:
+    enabled: false

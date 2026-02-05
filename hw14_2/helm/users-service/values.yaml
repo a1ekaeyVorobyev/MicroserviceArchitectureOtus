@@ -1,0 +1,26 @@
+image:
+  repository: a1ekseyramblerru/user-service
+  tag: "1.0"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  host: arch.homework
+  path: /users
+
+database:
+  host: postgres-postgresql
+  port: 5432
+  name: users
+  user: user
+  password: password
+  secret:
+    name: users-db-secret
+
+runMigrations: false  # включаем через --set runMigrations=true при установке

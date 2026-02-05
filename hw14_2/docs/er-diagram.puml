@@ -1,0 +1,18 @@
+@startuml
+entity users {
+  + id : BIGSERIAL <<PK>>
+  --
+  name : VARCHAR(255)
+  email : VARCHAR(255) <<UNIQUE>>
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity user_profiles {
+  + user_id : BIGINT <<PK, FK>>
+  --
+  bio : TEXT
+}
+
+users ||--|| user_profiles : "1 to 1"
+@enduml

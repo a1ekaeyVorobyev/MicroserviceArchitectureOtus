@@ -1,0 +1,22 @@
+image:
+  repository: users-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  host: arch.homework
+  path: /users
+
+database:
+  host: postgres
+  port: 5432
+  name: users
+  user: user
+  password: password
