@@ -1,0 +1,26 @@
+echo "=== Точные имена метрик и лейблов ==="
+
+# 1. Проверим все HTTP метрики
+echo "1. Все HTTP метрики:"
+curl -s "http://localhost:9090/api/v1/series?match[]=http_requests" | \
+  jq -r '.data[].__name__' | sort | uniq
+
+# 2. Проверим лейблы для http_requests_total
+echo -e "\n2. Лейблы http_requests_total:"
+curl -s "http://localhost:9090/api/v1/series?match[]=http_requests_total" | \
+  jq -r '.data[0] | to_entries[] | "\(.key)=\(.value)"' | grep -v "__name__"
+
+# 3. Проверим latency метрики
+echo -e "\n3. Latency метрики:"
+curl -s "http://localhost:9090/api/v1/series?match[]=http_request_duration" | \
+  jq -r '.data[].__name__' | sort | uniq
+
+# 4. Проверим конкретные значения
+echo -e "\n4. Примеры значений:"
+echo "   http_requests_total:"
+curl -s "http://localhost:9090/api/v1/query?query=http_requests_total" | \
+  jq -r '.data.result[0] | "   \(.metric) = \(.value[1])"'
+
+echo -e "\n   http_request_duration_seconds_bucket:"
+curl -s "http://localhost:9090/api/v1/query?query=http_request_duration_seconds_bucket" | \
+  jq -r '.data.result[0] | "   \(.metric) = \(.value[1])"' 2>/dev/null || echo "   Нет данных"

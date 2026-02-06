@@ -1,0 +1,397 @@
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=447 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1239 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=1881 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=6543 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1811 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=4352 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=6221 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1733 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=1855 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=3459 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1553 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=1667 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=2021 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=411 - Status: 500
+[SLOW] http://localhost:8080/api/orders?delay=1483 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=1709 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1709 - Status: 500
+[SLOW] http://localhost:8080/api/orders?delay=5229 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=5337 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1240 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=1612 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=2110 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=2110 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=4408 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=4773 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=4773 - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=785 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1071 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=1518 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=522 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1163 - 0.000s - Status: 400
+[SLOW] http://localhost:8080/api/products?delay=1443 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=888 - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=4181 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=4181 - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=4791 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=4791 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=5639 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1788 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/orders - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=2964 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=2964 - Status: 500
+[SLOW] http://localhost:8080/api/orders?delay=6857 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1137 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=1702 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/products - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1067 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=1659 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=522 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1071 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=1405 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=1705 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1705 - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=2088 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=2088 - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/users - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=450 - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=1391 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1391 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1381 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=1465 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=1786 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1786 - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=1128 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1128 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=4989 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=928 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1282 - 0.000s - Status: 400
+[SLOW] http://localhost:8080/api/products?delay=1540 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=1300 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1300 - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=1356 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1356 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1612 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=2093 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=891 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1813 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=2020 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=3015 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=4232 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=742 - Status: 500
+[SLOW] http://localhost:8080/api/orders?delay=1186 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=1541 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=1841 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1841 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=4167 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=6591 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/orders - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/users?delay=517 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1253 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=1640 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1640 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=2346 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=741 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1859 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=2840 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=3066 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=3313 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[SLOW] http://localhost:8080/api/orders?delay=1422 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=2119 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/orders - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1101 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=1163 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=1478 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=1786 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=4414 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=4414 - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1148 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=6143 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=995 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=995 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1452 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=1774 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=3311 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=3779 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/products?delay=426 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1903 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[SLOW] http://localhost:8080/api/orders?delay=1310 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=2704 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=2704 - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=458 - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=738 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1279 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=1299 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1299 - Status: 500
+[SLOW] http://localhost:8080/api/orders?delay=1860 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=2038 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=3351 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=5339 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=5339 - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/products - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1173 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=1690 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1690 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=1711 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=1258 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1258 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1481 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=1737 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=2059 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=3513 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=3952 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=4420 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=4420 - Status: 500
+[SLOW] http://localhost:8080/api/orders?delay=6555 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=933 - Status: 500
+[SLOW] http://localhost:8080/api/orders?delay=1888 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=6637 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=1014 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1014 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=2230 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=4755 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=6777 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=764 - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=1044 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1044 - Status: 500
+[SLOW] http://localhost:8080/api/orders?delay=1131 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=1249 - 0.000s - Status: 400
+[SLOW] http://localhost:8080/api/orders?delay=1907 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=4062 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=4062 - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1788 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=1876 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1876 - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=3781 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=4389 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/users?delay=4139 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=6627 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/users - Status: 500
+[SLOW] http://localhost:8080/api/force-error?delay=1091 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=1091 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1307 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=2226 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/users?delay=3301 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/users?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1353 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=1578 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=2449 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/force-error?delay=2644 - 0.000s - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=2644 - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[ERROR] http://localhost:8080/api/users - Status: 500
+[ERROR] http://localhost:8080/api/force-error - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1564 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=2024 - 0.000s - Status: 200
+[ERROR] http://localhost:8080/api/orders - Status: 500
+[ERROR] http://localhost:8080/api/orders?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?error=true - Status: 500
+[ERROR] http://localhost:8080/api/products?error=true - Status: 500
+[ERROR] http://localhost:8080/api/force-error?delay=865 - Status: 500
+[SLOW] http://localhost:8080/api/products?delay=1064 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/products?delay=2828 - 0.000s - Status: 200
+[SLOW] http://localhost:8080/api/orders?delay=3196 - 0.000s - Status: 200

@@ -1,0 +1,176 @@
+#!/bin/bash
+
+GRAFANA_URL="http://localhost:3000"
+
+echo "Получаем UID папки Go Monitoring..."
+FOLDER_UID=$(curl -s -u admin:admin $GRAFANA_URL/api/folders | \
+  jq -r '.[] | select(.title == "Go Monitoring") | .uid')
+
+if [ -z "$FOLDER_UID" ]; then
+  echo "Папка 'Go Monitoring' не найдена. Создаем..."
+  FOLDER_RESPONSE=$(curl -s -X POST \
+    -H "Content-Type: application/json" \
+    -u admin:admin \
+    -d '{"title": "Go Monitoring"}' \
+    $GRAFANA_URL/api/folders)
+  
+  FOLDER_UID=$(echo "$FOLDER_RESPONSE" | jq -r '.uid')
+  echo "Создана папка с UID: $FOLDER_UID"
+else
+  echo "Найдена папка с UID: $FOLDER_UID"
+fi
+
+echo "Создаем правило алерта..."
+
+# Пробуем разные форматы запросов
+
+# Вариант 1: Через provisioning API (Grafana 9+)
+echo "Попытка 1: Через provisioning API..."
+RESPONSE1=$(curl -s -w "\nHTTP_CODE:%{http_code}" -X POST \
+  -H "Content-Type: application/json" \
+  -u admin:admin \
+  -d "{
+    \"folderUID\": \"$FOLDER_UID\",
+    \"ruleGroup\": \"go-app-error-rate\",
+    \"title\": \"High Error Rate\",
+    \"condition\": \"A\",
+    \"data\": [
+      {
+        \"refId\": \"A\",
+        \"datasourceUid\": \"prometheus-main\",
+        \"model\": {
+          \"expr\": \"sum(rate(http_requests_total{status=~\\\"5..\\\"}[5m])) / sum(rate(http_requests_total[5m])) * 100\",
+          \"refId\": \"A\",
+          \"editorMode\": \"code\",
+          \"instant\": false,
+          \"range\": true
+        }
+      }
+    ],
+    \"for\": \"2m\",
+    \"noDataState\": \"NoData\",
+    \"execErrState\": \"Alerting\",
+    \"annotations\": {
+      \"summary\": \"High error rate\"
+    },
+    \"labels\": {
+      \"severity\": \"critical\"
+    }
+  }" \
+  $GRAFANA_URL/api/v1/provisioning/alert-rules)
+
+HTTP_CODE1=$(echo "$RESPONSE1" | grep "HTTP_CODE:" | cut -d':' -f2)
+BODY1=$(echo "$RESPONSE1" | sed '/HTTP_CODE:/d')
+
+echo "Response 1 code: $HTTP_CODE1"
+if [ "$HTTP_CODE1" = "200" ] || [ "$HTTP_CODE1" = "201" ]; then
+  echo "Успех! Правило создано."
+  echo "Response: $BODY1"
+  exit 0
+fi
+
+# Вариант 2: Через ruler API
+echo "Попытка 2: Через ruler API..."
+RESPONSE2=$(curl -s -w "\nHTTP_CODE:%{http_code}" -X POST \
+  -H "Content-Type: application/json" \
+  -u admin:admin \
+  -d "[
+    {
+      \"name\": \"go-app-error-rate\",
+      \"interval\": \"1m\",
+      \"rules\": [
+        {
+          \"grafana_alert\": {
+            \"title\": \"High Error Rate\",
+            \"condition\": \"A\",
+            \"data\": [
+              {
+                \"refId\": \"A\",
+                \"datasourceUid\": \"prometheus-main\",
+                \"model\": {
+                  \"expr\": \"sum(rate(http_requests_total{status=~\\\"5..\\\"}[5m])) / sum(rate(http_requests_total[5m])) * 100\",
+                  \"refId\": \"A\"
+                }
+              }
+            ],
+            \"for\": \"2m\",
+            \"no_data_state\": \"NoData\",
+            \"exec_err_state\": \"Alerting\",
+            \"annotations\": {
+              \"summary\": \"High error rate\"
+            },
+            \"labels\": {
+              \"severity\": \"critical\"
+            }
+          }
+        }
+      ]
+    }
+  ]" \
+  $GRAFANA_URL/api/ruler/grafana/api/v1/rules/$FOLDER_UID)
+
+HTTP_CODE2=$(echo "$RESPONSE2" | grep "HTTP_CODE:" | cut -d':' -f2)
+BODY2=$(echo "$RESPONSE2" | sed '/HTTP_CODE:/d')
+
+echo "Response 2 code: $HTTP_CODE2"
+if [ "$HTTP_CODE2" = "200" ] || [ "$HTTP_CODE2" = "201" ]; then
+  echo "Успех! Правило создано через ruler API."
+  echo "Response: $BODY2"
+  exit 0
+fi
+
+# Вариант 3: Простой POST с минимальными полями
+echo "Попытка 3: Минимальный запрос..."
+RESPONSE3=$(curl -s -w "\nHTTP_CODE:%{http_code}" -X POST \
+  -H "Content-Type: application/json" \
+  -u admin:admin \
+  -d "{
+    \"dashboardUid\": null,
+    \"panelId\": null,
+    \"name\": \"High Error Rate\",
+    \"condition\": \"A\",
+    \"data\": [
+      {
+        \"refId\": \"A\",
+        \"datasourceUid\": \"prometheus-main\",
+        \"queryType\": \"\",
+        \"model\": {
+          \"expr\": \"sum(rate(http_requests_total{status=~\\\"5..\\\"}[5m])) / sum(rate(http_requests_total[5m])) * 100\",
+          \"refId\": \"A\",
+          \"interval\": \"\",
+          \"legendFormat\": \"\"
+        }
+      }
+    ],
+    \"interval\": \"1m\",
+    \"for\": \"2m\",
+    \"noDataState\": \"NoData\",
+    \"execErrState\": \"Alerting\",
+    \"annotations\": [
+      {
+        \"key\": \"summary\",
+        \"value\": \"High error rate\"
+      }
+    ],
+    \"labels\": [
+      {
+        \"key\": \"severity\",
+        \"value\": \"critical\"
+      }
+    ]
+  }" \
+  $GRAFANA_URL/api/alert-notifications)
+
+HTTP_CODE3=$(echo "$RESPONSE3" | grep "HTTP_CODE:" | cut -d':' -f2)
+BODY3=$(echo "$RESPONSE3" | sed '/HTTP_CODE:/d')
+
+echo "Response 3 code: $HTTP_CODE3"
+echo "Response 3 body: $BODY3"
+
+if [ "$HTTP_CODE3" = "200" ] || [ "$HTTP_CODE3" = "201" ]; then
+  echo "Успех! Правило создано."
+  exit 0
+else
+  echo "Все попытки неудачны."
+  echo "Попробуйте создать правило через UI и посмотреть структуру запроса."
+fi

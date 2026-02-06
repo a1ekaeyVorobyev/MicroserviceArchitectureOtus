@@ -1,0 +1,205 @@
+apiVersion: 1
+
+groups:
+  - name: error-rate-alerts
+    folder: "Go Monitoring"
+    interval: 1m
+    orgId: 1
+    rules:
+      # Тестовое правило для проверки работы
+      - uid: test_rule_working
+        title: "Test Alert - Working"
+        condition: "A"
+        data:
+          - refId: "A"
+            datasourceUid: "prometheus-main"
+            relativeTimeRange:
+              from: 300
+              to: 0
+            model:
+              expr: "up{job=\"monitoring-app\"}"
+              instant: true
+              interval: 1m
+              datasource:
+                type: "prometheus"
+                uid: "prometheus-main"
+              refId: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: 0s
+        annotations:
+          summary: "Service is up"
+          description: "Service {{ $labels.instance }} is running"
+        labels:
+          severity: "info"
+          team: "backend"
+        isPaused: false
+
+      # Правило для высокой error rate
+      - uid: error_rate_high
+        title: "High Error Rate (> 5%)"
+        condition: "A"
+        data:
+          - refId: "A"
+            datasourceUid: "prometheus-main"
+            relativeTimeRange:
+              from: 300
+              to: 0
+            model:
+              expr: |
+                (
+                  sum(rate(http_requests_total{status=~"5.."}[2m]))
+                  /
+                  (sum(rate(http_requests_total[2m])) > 0)
+                ) * 100 > 5
+              instant: true
+              interval: 1m
+              datasource:
+                type: "prometheus"
+                uid: "prometheus-main"
+              refId: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: 2m
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $values.A.Value }}% (above 5%) for 2 minutes"
+        labels:
+          severity: "warning"
+          team: "backend"
+        isPaused: false
+
+  - name: latency-alerts
+    folder: "Go Monitoring"
+    interval: 1m
+    orgId: 1
+    rules:
+      # Правило для высокой latency (p95)
+      - uid: latency_p95_high
+        title: "High Latency P95 (> 0.5s)"
+        condition: "A"
+        data:
+          - refId: "A"
+            datasourceUid: "prometheus-main"
+            relativeTimeRange:
+              from: 300
+              to: 0
+            model:
+              expr: |
+                histogram_quantile(0.95,
+                  sum by(le, method, endpoint) (
+                    rate(http_request_duration_seconds_bucket[2m])
+                  )
+                ) > 0.5
+              instant: true
+              interval: 1m
+              datasource:
+                type: "prometheus"
+                uid: "prometheus-main"
+              refId: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: 2m
+        annotations:
+          summary: "High P95 latency detected"
+          description: "P95 latency is {{ $values.A.Value }}s (above 0.5s) for 2 minutes"
+        labels:
+          severity: "warning"
+          team: "backend"
+        isPaused: false
+
+      # Правило для критической latency (p99)
+      - uid: latency_p99_critical
+        title: "Critical Latency P99 (> 1s)"
+        condition: "A"
+        data:
+          - refId: "A"
+            datasourceUid: "prometheus-main"
+            relativeTimeRange:
+              from: 300
+              to: 0
+            model:
+              expr: |
+                histogram_quantile(0.99,
+                  sum by(le, method, endpoint) (
+                    rate(http_request_duration_seconds_bucket[2m])
+                  )
+                ) > 1
+              instant: true
+              interval: 1m
+              datasource:
+                type: "prometheus"
+                uid: "prometheus-main"
+              refId: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: 1m
+        annotations:
+          summary: "Critical P99 latency detected"
+          description: "P99 latency is {{ $values.A.Value }}s (above 1s) for 1 minute"
+        labels:
+          severity: "critical"
+          team: "backend"
+        isPaused: false
+  - name: additional-alerts
+    folder: "Go Monitoring"
+    interval: 1m
+    orgId: 1
+    rules:
+      # Алерт на отсутствие трафика
+      - uid: no_traffic
+        title: "No Traffic Alert"
+        condition: "A"
+        data:
+          - refId: "A"
+            datasourceUid: "prometheus-main"
+            relativeTimeRange:
+              from: 300
+              to: 0
+            model:
+              expr: "rate(http_requests_total[5m]) == 0"
+              instant: true
+              interval: 1m
+              datasource:
+                type: "prometheus"
+                uid: "prometheus-main"
+              refId: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: 5m
+        annotations:
+          summary: "No HTTP traffic detected"
+          description: "No requests received in the last 5 minutes"
+        labels:
+          severity: "warning"
+          team: "backend"
+        isPaused: false
+
+      # Алерт на высокую частоту запросов
+      - uid: high_request_rate
+        title: "High Request Rate"
+        condition: "A"
+        data:
+          - refId: "A"
+            datasourceUid: "prometheus-main"
+            relativeTimeRange:
+              from: 300
+              to: 0
+            model:
+              expr: "sum(rate(http_requests_total[1m])) > 10"
+              instant: true
+              interval: 1m
+              datasource:
+                type: "prometheus"
+                uid: "prometheus-main"
+              refId: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: 2m
+        annotations:
+          summary: "High request rate detected"
+          description: "Request rate is {{ $values.A.Value }} req/s (above 10 req/s)"
+        labels:
+          severity: "info"
+          team: "backend"
+        isPaused: false

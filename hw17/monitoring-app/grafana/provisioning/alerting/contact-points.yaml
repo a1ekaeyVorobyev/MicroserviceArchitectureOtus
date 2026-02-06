@@ -1,0 +1,10 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: default-email
+    receivers:
+      - uid: email-receiver
+        type: email
+        settings:
+          addresses: a1eksey@rambler.ru

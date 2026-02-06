@@ -1,0 +1,4 @@
+apiVersion: 1
+folders:
+  - uid: monitoring-folder
+    title: Monitoring Alerts

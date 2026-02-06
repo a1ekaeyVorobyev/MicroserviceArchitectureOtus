@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Monitoring App - Alert Testing</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .endpoint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .endpoint:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .endpoint.danger {
+            border-left-color: #f44336;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffeaea 100%);
+        }
+
+        .endpoint.warning {
+            border-left-color: #ff9800;
+            background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
+        }
+
+        .endpoint.success {
+            border-left-color: #4CAF50;
+            background: linear-gradient(135deg, #f0fff4 0%, #e6ffe6 100%);
+        }
+
+        .endpoint.info {
+            border-left-color: #2196F3;
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%);
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            display: block;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .description {
+            color: #666;
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+
+        .monitoring-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .link-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .link-icon {
+            font-size: 2rem;
+        }
+
+        .link-content h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-top: 15px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+            }
+
+            .endpoint-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span class="emoji">🚀</span> Go Monitoring Application <span class="emoji">📊</span></h1>
+            <p>Comprehensive tool for testing and monitoring application performance with Prometheus, Grafana, and custom alerts</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h3><span class="emoji">🔴</span> Test Error Rate Alerts</h3>
+                <div class="endpoint-grid">
+                    <div class="endpoint danger">
+                        <code>GET /api/force-error</code>
+                        <div class="description">Always returns HTTP 500 Internal Server Error. Perfect for testing error rate alerts in Prometheus/Grafana.</div>
+                    </div>
+                    <div class="endpoint danger">
+                        <code>GET /api/users/invalid-id</code>
+                        <div class="description">Randomly returns 400 or 500 errors (5% chance). Simulates realistic error scenarios for alert testing.</div>
+                    </div>
+                    <div class="endpoint danger">
+                        <code>GET /api/any-endpoint?error=true</code>
+                        <div class="description">Add <strong>?error=true</strong> parameter to any API endpoint to force an error response.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><span class="emoji">🟡</span> Test Latency Alerts</h3>
+                <div class="endpoint-grid">
+                    <div class="endpoint warning">
+                        <code>GET /api/slow?delay=2000</code>
+                        <div class="description">2 second delay response. Tests latency alerts for response time thresholds.</div>
+                    </div>
+                    <div class="endpoint warning">
+                        <code>GET /api/slow?delay=5000</code>
+                        <div class="description">5 second delay response. Simulates extremely slow responses for critical latency alerts.</div>
+                    </div>
+                    <div class="endpoint warning">
+                        <code>GET /api/any-endpoint?delay=1000</code>
+                        <div class="description">Add <strong>?delay=1000</strong> parameter to simulate 1 second delay on any endpoint.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><span class="emoji">🟢</span> Normal API Endpoints</h3>
+                <div class="endpoint-grid">
+                    <div class="endpoint success">
+                        <code>GET /api/users</code>
+                        <div class="description">User API endpoint with normal response time (100-300ms). Returns JSON data with simulated processing delay.</div>
+                    </div>
+                    <div class="endpoint success">
+                        <code>GET /api/orders</code>
+                        <div class="description">Order management endpoint. Includes random delay and occasional errors for realistic testing.</div>
+                    </div>
+                    <div class="endpoint success">
+                        <code>GET /api/products</code>
+                        <div class="description">Product catalog endpoint. Simulates database queries with variable response times.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><span class="emoji">📊</span> Monitoring & Observability</h3>
+                <div class="monitoring-links">
+                    <a href="/health" target="_blank" class="link-card">
+                        <div class="link-icon">🏥</div>
+                        <div class="link-content">
+                            <h4>Health Check</h4>
+                            <p>Live application health status with timestamp</p>
+                        </div>
+                    </a>
+                    <a href="/metrics" target="_blank" class="link-card">
+                        <div class="link-icon">📈</div>
+                        <div class="link-content">
+                            <h4>Prometheus Metrics</h4>
+                            <p>Real-time metrics endpoint for Prometheus scraping</p>
+                        </div>
+                    </a>
+                    <a href="http://localhost:3000" target="_blank" class="link-card">
+                        <div class="link-icon">📊</div>
+                        <div class="link-content">
+                            <h4>Grafana Dashboard</h4>
+                            <p>Visual monitoring dashboard (admin/admin)</p>
+                        </div>
+                    </a>
+                    <a href="http://localhost:9090" target="_blank" class="link-card">
+                        <div class="link-icon">🔍</div>
+                        <div class="link-content">
+                            <h4>Prometheus UI</h4>
+                            <p>Query and analyze metrics directly</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><span class="emoji">⚡</span> Quick Test Commands</h3>
+                <div class="endpoint info">
+                    <div class="description">Use these terminal commands to generate test data:</div>
+                    <pre>
+# Generate multiple errors simultaneously
+for i in {1..50}; do curl -s http://localhost:8080/api/force-error > /dev/null & done
+
+# Test latency with custom delay
+curl "http://localhost:8080/api/slow?delay=3000"
+
+# Test normal endpoint with parameter
+curl "http://localhost:8080/api/users?delay=500"
+
+# Generate mixed traffic (run in separate terminals)
+./load-test.sh  # See GitHub for load test script
+
+# Monitor live metrics while testing
+watch -n 1 'curl -s http://localhost:8080/metrics | grep http_requests_total'</pre>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3><span class="emoji">📋</span> Available Metrics</h3>
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-value">http_requests_total</div>
+                        <div class="stat-label">Total HTTP requests by endpoint and status</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">http_request_duration_seconds</div>
+                        <div class="stat-label">Request duration histograms with percentiles</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">http_errors_total</div>
+                        <div class="stat-label">5xx errors count for alerting</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dynamic port update in case it changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const port = window.location.port || '8080';
+            const elements = document.querySelectorAll('code, pre');
+            
+            elements.forEach(element => {
+                element.textContent = element.textContent.replace(/localhost:8080/g, `localhost:${port}`);
+            });
+        });
+
+        // Add some interactive effects
+        document.querySelectorAll('.endpoint').forEach(endpoint => {
+            endpoint.addEventListener('click', function() {
+                const code = this.querySelector('code');
+                if (code) {
+                    navigator.clipboard.writeText(code.textContent.trim())
+                        .then(() => {
+                            const originalText = code.textContent;
+                            code.textContent = '✓ Copied!';
+                            setTimeout(() => {
+                                code.textContent = originalText;
+                            }, 2000);
+                        });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
