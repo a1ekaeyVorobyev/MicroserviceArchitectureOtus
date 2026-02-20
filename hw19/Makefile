@@ -10,10 +10,12 @@ TAG=latest
 build:
 	docker build -t $(DOCKER_USER)/auth-service:latest ./auth-service
 	docker build -t $(DOCKER_USER)/profile-service:latest ./profile-service
+	docker build -t $(DOCKER_USER)/api-gateway:latest ./api-gateway
 
 push:
 	docker push $(DOCKER_USER)/auth-service:$(TAG)
 	docker push $(DOCKER_USER)/profile-service:$(TAG)
+	docker push $(DOCKER_USER)/api-gateway:$(TAG)
 
 deploy:
 	kubectl create namespace $(NAMESPACE) --dry-run=client -o yaml | kubectl apply -f -
@@ -51,5 +53,26 @@ purge:
 wipe:
 	kubectl delete namespace $(NAMESPACE)
 
+# Тестирование через port-forward (рекомендуется)
+test-local:
+	 kubectl port-forward svc/api-gateway 8081:8080 -n $(NAMESPACE) & \
+	 sleep 3 && \
+	 newman run postman/collection.json --env-var baseUrl=http://localhost:8081 --reporters cli; \
+	 pkill -f "kubectl port-forward"
+
+# Тестирование через arch.homework (требует minikube tunnel)
 test:
-	newman run postman/collection.json --env-var baseUrl=http://arch.homework --reporters cli
+	   newman run postman/collection.json \
+  --env-var baseUrl=http://arch.homework \
+  --reporters cli
+
+# Тестирование с кастомным URL
+test-custom:
+	 newman run postman/collection.json --env-var baseUrl=$(URL) --reporters cli
+
+# Проброс порта gateway
+port-forward:
+	 kubectl port-forward svc/api-gateway 8081:8080 -n $(NAMESPACE)
+
+# Все тесты сразу (с очисткой)
+test-all: purge deploy port-forward test-local

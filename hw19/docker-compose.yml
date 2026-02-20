@@ -16,7 +16,7 @@ services:
       - "6379:6379"
 
   auth-service:
-    image: yourdockerhub/auth-service:latest
+    image: a1ekseyramblerru/auth-service:latest
     environment:
       DATABASE_URL: postgres://user:pass@postgres:5432/app?sslmode=disable
       REDIS_ADDR: redis:6379
@@ -27,7 +27,7 @@ services:
       - redis
 
   profile-service:
-    image: yourdockerhub/profile-service:latest
+    image: a1ekseyramblerru/profile-service:latest
     environment:
       DATABASE_URL: postgres://user:pass@postgres:5432/app?sslmode=disable
     ports:

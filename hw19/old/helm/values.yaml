@@ -1,0 +1,15 @@
+namespace: arch-homework
+
+image:
+  auth: a1ekseyramblerru/auth-service:latest
+  profile: a1ekseyramblerru/profile-service:latest
+  gateway: a1ekseyramblerru/api-gateway:latest
+
+postgres:
+  image: postgres:15
+  user: user
+  password: pass
+  db: app
+
+redis:
+  image: redis:7

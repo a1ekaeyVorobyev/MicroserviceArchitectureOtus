@@ -167,6 +167,49 @@
       ]
     },
     {
+      "name": "Create Profile User 2",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token2}}"
+          }
+        ],
+        "url": "{{baseUrl}}/profile/me",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"first_name\":\"Petr\",\"last_name\":\"Petrov\",\"phone\":\"54321\"}"
+        }
+      }
+    },
+    {
+      "name": "Verify Profile User 2",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token2}}"
+          }
+        ],
+        "url": "{{baseUrl}}/profile/me"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let json = pm.response.json();",
+              "pm.test('Profile user 2 created', function () {",
+              "    pm.expect(json.first_name).to.eql('Petr');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "User2 should NOT access User1 profile",
       "request": {
         "method": "GET",
@@ -186,6 +229,7 @@
               "let json = pm.response.json();",
               "pm.test('Different user profile', function () {",
               "    pm.expect(json.first_name).to.not.eql('Ivan');",
+              "    pm.expect(json.first_name).to.eql('Petr');",
               "});"
             ]
           }

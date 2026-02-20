@@ -3,7 +3,46 @@ namespace: arch-homework
 image:
   auth: a1ekseyramblerru/auth-service:latest
   profile: a1ekseyramblerru/profile-service:latest
+  gateway: a1ekseyramblerru/api-gateway:latest
 
+postgres:
+  image: postgres:15
+  user: user
+  password: pass
+  db: app
+
+redis:
+  image: redis:7
+namespace: arch-homework
+
+# API Gateway настройки
+apiGateway:
+  image: a1ekseyramblerru/api-gateway:latest
+  replicas: 1
+  service:
+    type: LoadBalancer  # Важно для minikube tunnel
+    port: 80            # Внешний порт
+    targetPort: 8080    # Внутренний порт контейнера
+
+# Настройки сервисов
+auth-service:
+  image: a1ekseyramblerru/auth-service:latest
+  port: 80
+
+profile-service:
+  image: a1ekseyramblerru/profile-service:latest
+  port: 80
+
+# Настройки Ingress
+ingress:
+  enabled: true
+  host: arch.homework
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/limit-rps: "10"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "3"
+
+# Существующие настройки
 postgres:
   image: postgres:15
   user: user
