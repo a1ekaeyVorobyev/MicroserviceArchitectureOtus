@@ -1,0 +1,196 @@
+{
+  "info": {
+    "name": "Arch Homework Full Scenario",
+    "_postman_id": "arch-homework-collection",
+    "description": "Full auth + profile isolation test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://arch.homework"
+    }
+  ],
+  "item": [
+    {
+      "name": "Register User 1",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.environment.set('email1', 'user1_' + Math.random().toString(36).substring(7) + '@mail.com');",
+              "pm.environment.set('password1', 'Pass123!');"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/auth/register",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"{{email1}}\",\"password\":\"{{password1}}\"}"
+        }
+      }
+    },
+    {
+      "name": "Profile should be unauthorized without login",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/profile/me"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Unauthorized', function () {",
+              "    pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Login User 1",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"{{email1}}\",\"password\":\"{{password1}}\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let json = pm.response.json();",
+              "pm.environment.set('token1', json.access_token);",
+              "pm.test('Login successful', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update Profile User 1",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token1}}"
+          }
+        ],
+        "url": "{{baseUrl}}/profile/me",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"first_name\":\"Ivan\",\"last_name\":\"Ivanov\",\"phone\":\"12345\"}"
+        }
+      }
+    },
+    {
+      "name": "Verify Profile Updated User 1",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token1}}"
+          }
+        ],
+        "url": "{{baseUrl}}/profile/me"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let json = pm.response.json();",
+              "pm.test('Profile updated', function () {",
+              "    pm.expect(json.first_name).to.eql('Ivan');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Register User 2",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.environment.set('email2', 'user2_' + Math.random().toString(36).substring(7) + '@mail.com');",
+              "pm.environment.set('password2', 'Pass123!');"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/register",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"{{email2}}\",\"password\":\"{{password2}}\"}"
+        }
+      }
+    },
+    {
+      "name": "Login User 2",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"{{email2}}\",\"password\":\"{{password2}}\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let json = pm.response.json();",
+              "pm.environment.set('token2', json.access_token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "User2 should NOT access User1 profile",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token2}}"
+          }
+        ],
+        "url": "{{baseUrl}}/profile/me"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let json = pm.response.json();",
+              "pm.test('Different user profile', function () {",
+              "    pm.expect(json.first_name).to.not.eql('Ivan');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

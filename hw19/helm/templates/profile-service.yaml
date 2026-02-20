@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: profile-service
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: profile-service
+spec:
+  selector:
+    app: profile-service
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
