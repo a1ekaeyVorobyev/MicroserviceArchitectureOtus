@@ -1,0 +1,19 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ .Release.Name }}-alerts
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: monitoring-app.rules
+      rules:
+        - alert: HighCPUUsage
+          expr: sum(rate(container_cpu_usage_seconds_total{pod=~"{{ .Release.Name }}-.*"}[2m])) * 100 > {{ .Values.monitoring.cpuThreshold }}
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: High CPU usage detected
+{{- end }}

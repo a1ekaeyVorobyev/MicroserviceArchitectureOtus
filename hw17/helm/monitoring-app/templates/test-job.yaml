@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-e2e
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: test
+          image: curlimages/curl:8.5.0
+          command: ["/bin/sh","-c"]
+          args:
+            - |
+              echo "Generating load..."
+              for i in $(seq 1 200); do
+                curl -s http://{{ .Release.Name }}:8080/api/orders > /dev/null
+              done
+              sleep 20
+              echo "Checking Prometheus API..."
+              curl -s http://kube-prom-kube-prometheus-prometheus:9090/api/v1/query?query=up | grep success
+              echo "Checking firing alerts..."
+              curl -s http://kube-prom-kube-prometheus-prometheus:9090/api/v1/alerts | grep '"state":"firing"' || exit 1

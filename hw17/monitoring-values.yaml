@@ -1,0 +1,38 @@
+
+grafana:
+  adminPassword: admin
+  ingress:
+    enabled: true
+    hosts:
+      - arch.homework
+
+  dashboards:
+    default:
+      monitoring-app:
+        json: |
+          {
+            "title": "Monitoring App - Pod Resources",
+            "schemaVersion": 38,
+            "panels": [
+              {
+                "type": "timeseries",
+                "title": "CPU Usage per Pod",
+                "targets": [
+                  {
+                    "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"monitoring-app.*\"}[1m])) by (pod)",
+                    "legendFormat": "{{pod}}"
+                  }
+                ]
+              },
+              {
+                "type": "timeseries",
+                "title": "Memory Usage per Pod",
+                "targets": [
+                  {
+                    "expr": "sum(container_memory_usage_bytes{pod=~\"monitoring-app.*\"}) by (pod)",
+                    "legendFormat": "{{pod}}"
+                  }
+                ]
+              }
+            ]
+          }
