@@ -1,0 +1,3358 @@
+{
+  "collection": {
+    "item": [
+      {
+        "id": "f404a555-e2ae-4aa1-9b41-4d9367c473a6",
+        "name": "1. Create User",
+        "request": {
+          "url": {
+            "path": [
+              "users"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"email\": \"{{$randomEmail}}\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "0a74fb94-80fb-437a-9775-708afd48de66",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status code is 201\", function() {",
+                "    pm.response.to.have.status(201);",
+                "});",
+                "",
+                "pm.test(\"User has ID\", function() {",
+                "    var jsonData = pm.response.json();",
+                "    pm.expect(jsonData.id).to.not.be.empty;",
+                "    pm.variables.set(\"userId\", jsonData.id);",
+                "    console.log(\"User ID:\", jsonData.id);",
+                "});"
+              ],
+              "_lastExecutionId": "b6e0a38c-2904-4dba-85ed-d4b08d318829"
+            }
+          }
+        ]
+      },
+      {
+        "id": "af9d189b-80eb-47b7-9c46-eb8f9e2d5c6e",
+        "name": "2. Deposit Money",
+        "request": {
+          "url": {
+            "path": [
+              "accounts",
+              "{{userId}}",
+              "deposit"
+            ],
+            "host": [
+              "{{billingUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"amount\": 200\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "1d664313-3c56-43ac-88bc-15825815a7a7",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status code is 200\", function() {",
+                "    pm.response.to.have.status(200);",
+                "});",
+                "",
+                "pm.test(\"Balance updated to 200\", function() {",
+                "    var jsonData = pm.response.json();",
+                "    pm.expect(jsonData.balance).to.equal(200);",
+                "    console.log(\"New balance:\", jsonData.balance);",
+                "});"
+              ],
+              "_lastExecutionId": "8873db33-4914-4895-8631-b20bc8d38a80"
+            }
+          }
+        ]
+      },
+      {
+        "id": "f81d44b9-a5db-4a92-b75f-441f05c30fe4",
+        "name": "3. Create Order (Success)",
+        "request": {
+          "url": {
+            "path": [
+              "orders"
+            ],
+            "host": [
+              "{{orderUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"amount\": 100,\n  \"email\": \"test@example.com\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "b432baa5-82c9-43f9-ba7c-bf4895373455",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status code is 201\", function() {",
+                "    pm.response.to.have.status(201);",
+                "});",
+                "",
+                "pm.test(\"Order completed successfully\", function() {",
+                "    var jsonData = pm.response.json();",
+                "    pm.expect(jsonData.status).to.equal(\"completed\");",
+                "    pm.variables.set(\"orderId\", jsonData.id);",
+                "    console.log(\"Order ID:\", jsonData.id, \"Status:\", jsonData.status);",
+                "});"
+              ],
+              "_lastExecutionId": "9cd0328d-a164-4a24-82d5-94b45f1c7c69"
+            }
+          }
+        ]
+      },
+      {
+        "id": "1ca10e85-63c3-4aef-a680-d7b1a2ca16a7",
+        "name": "4. Check Balance After Success",
+        "request": {
+          "url": {
+            "path": [
+              "accounts",
+              "{{userId}}"
+            ],
+            "host": [
+              "{{billingUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "eaf6f1f8-5dbe-4940-96c1-a84842db3b4b",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status code is 200\", function() {",
+                "    pm.response.to.have.status(200);",
+                "});",
+                "",
+                "pm.test(\"Balance reduced to 100\", function() {",
+                "    var jsonData = pm.response.json();",
+                "    pm.expect(jsonData.balance).to.equal(100);",
+                "    console.log(\"Balance after order:\", jsonData.balance);",
+                "});"
+              ],
+              "_lastExecutionId": "7195a12d-af7e-4395-b109-eb7c846a1ec1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "e79bdda1-8ce0-4ed1-85d3-2c10c9a65a79",
+        "name": "5. Check Notifications After Success",
+        "request": {
+          "url": {
+            "path": [
+              "notifications"
+            ],
+            "host": [
+              "{{notificationUrl}}"
+            ],
+            "query": [
+              {
+                "key": "user_id",
+                "value": "{{userId}}"
+              }
+            ],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "d09cfad4-6cf3-4ba4-877a-cc9f5a4511f2",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status code is 200\", function() {",
+                "    pm.response.to.have.status(200);",
+                "});",
+                "",
+                "var jsonData = pm.response.json();",
+                "console.log(\"Raw notifications:\", JSON.stringify(jsonData));",
+                "",
+                "pm.test(\"Success notification received\", function() {",
+                "    var found = false;",
+                "    for (var i = 0; i < jsonData.length; i++) {",
+                "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+                "            found = true;",
+                "            console.log(\"✅ Found success notification:\", jsonData[i].message);",
+                "            break;",
+                "        }",
+                "    }",
+                "    pm.expect(found, \"No success notification found\").to.be.true;",
+                "});"
+              ],
+              "_lastExecutionId": "1079184d-0b15-4b33-8d5c-f4c37c62ffa1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "5379ef45-e55d-482d-9099-388f24eeef8e",
+        "name": "6. Create Order (Fail - Insufficient Funds)",
+        "request": {
+          "url": {
+            "path": [
+              "orders"
+            ],
+            "host": [
+              "{{orderUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"amount\": 200,\n  \"email\": \"test@example.com\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "38bbcded-c274-4bd5-a562-62586c28faff",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status code is 402\", function() {",
+                "    pm.response.to.have.status(402);",
+                "});",
+                "",
+                "pm.test(\"Order failed - insufficient funds\", function() {",
+                "    var jsonData = pm.response.json();",
+                "    pm.expect(jsonData.status).to.equal(\"insufficient_funds\");",
+                "    console.log(\"Failed order status:\", jsonData.status);",
+                "});"
+              ],
+              "_lastExecutionId": "4131bac0-c818-4d4a-ae8e-ddc8d44c7dfa"
+            }
+          }
+        ]
+      },
+      {
+        "id": "16988441-7a89-455a-adbf-0f2c3973d288",
+        "name": "7. Check Balance Unchanged",
+        "request": {
+          "url": {
+            "path": [
+              "accounts",
+              "{{userId}}"
+            ],
+            "host": [
+              "{{billingUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "bc7036a4-3c03-41a7-921b-051e3e4eeca2",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status code is 200\", function() {",
+                "    pm.response.to.have.status(200);",
+                "});",
+                "",
+                "pm.test(\"Balance unchanged at 100\", function() {",
+                "    var jsonData = pm.response.json();",
+                "    pm.expect(jsonData.balance).to.equal(100);",
+                "    console.log(\"Balance after failed order:\", jsonData.balance);",
+                "});"
+              ],
+              "_lastExecutionId": "a437c673-59e7-43dc-a95c-c23b4b1b6aea"
+            }
+          }
+        ]
+      },
+      {
+        "id": "a8c698fb-48dd-4baa-8127-3c99916c74d7",
+        "name": "8. Check Notifications After Fail",
+        "request": {
+          "url": {
+            "path": [
+              "notifications"
+            ],
+            "host": [
+              "{{notificationUrl}}"
+            ],
+            "query": [
+              {
+                "key": "user_id",
+                "value": "{{userId}}"
+              }
+            ],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "7fed9a01-57b0-4b73-9d69-99690cbfcff5",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status code is 200\", function() {",
+                "    pm.response.to.have.status(200);",
+                "});",
+                "",
+                "var jsonData = pm.response.json();",
+                "console.log(\"Final notifications:\", JSON.stringify(jsonData));",
+                "",
+                "pm.test(\"Both success and failure notifications received\", function() {",
+                "    var foundSuccess = false;",
+                "    var foundFail = false;",
+                "    for (var i = 0; i < jsonData.length; i++) {",
+                "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+                "            foundSuccess = true;",
+                "            console.log(\"✅ Found success:\", jsonData[i].message);",
+                "        }",
+                "        if (jsonData[i].message && jsonData[i].message.includes('недостаточно')) {",
+                "            foundFail = true;",
+                "            console.log(\"✅ Found fail:\", jsonData[i].message);",
+                "        }",
+                "    }",
+                "    pm.expect(foundSuccess, \"No success notification\").to.be.true;",
+                "    pm.expect(foundFail, \"No fail notification\").to.be.true;",
+                "});"
+              ],
+              "_lastExecutionId": "baf23cef-a9b9-4cf7-960f-a650ee4a25a8"
+            }
+          }
+        ]
+      }
+    ],
+    "event": [],
+    "variable": [
+      {
+        "type": "any",
+        "value": "localhost:8081",
+        "key": "baseUrl"
+      },
+      {
+        "type": "any",
+        "value": "localhost:8082",
+        "key": "orderUrl"
+      },
+      {
+        "type": "any",
+        "value": "localhost:8083",
+        "key": "billingUrl"
+      },
+      {
+        "type": "any",
+        "value": "localhost:8084",
+        "key": "notificationUrl"
+      }
+    ],
+    "info": {
+      "_postman_id": "258ee6c1-f3ab-4b78-9c98-ddc5ca951a42",
+      "name": "Microservices Architecture Tests",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    }
+  },
+  "environment": {
+    "id": "07a0e63b-a7f1-4548-b773-2c5adaf62241",
+    "name": "arch-env-local",
+    "values": [
+      {
+        "type": "any",
+        "value": "localhost:8081",
+        "key": "baseUrl"
+      },
+      {
+        "type": "any",
+        "value": "localhost:8082",
+        "key": "orderUrl"
+      },
+      {
+        "type": "any",
+        "value": "localhost:8083",
+        "key": "billingUrl"
+      },
+      {
+        "type": "any",
+        "value": "localhost:8084",
+        "key": "notificationUrl"
+      }
+    ]
+  },
+  "globals": {
+    "id": "158880b8-9a33-482c-9e47-6fb726f940e7",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 16,
+        "pending": 0,
+        "failed": 2
+      },
+      "testScripts": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 68.25,
+      "responseMin": 6,
+      "responseMax": 231,
+      "responseSd": 77.7299009390852,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1773483995865,
+      "completed": 1773483996769
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 8,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "5594c98c-ce37-4b5a-a11b-b504ff3d8f88",
+          "httpRequestId": "42c4cac1-9d6e-4c84-9fa0-a793bca089a2"
+        },
+        "item": {
+          "id": "f404a555-e2ae-4aa1-9b41-4d9367c473a6",
+          "name": "1. Create User",
+          "request": {
+            "url": {
+              "path": [
+                "users"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{$randomEmail}}\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "0a74fb94-80fb-437a-9775-708afd48de66",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"User has ID\", function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.not.be.empty;",
+                  "    pm.variables.set(\"userId\", jsonData.id);",
+                  "    console.log(\"User ID:\", jsonData.id);",
+                  "});"
+                ],
+                "_lastExecutionId": "b6e0a38c-2904-4dba-85ed-d4b08d318829"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8081",
+            "path": [
+              "users"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "8ad4d340-0297-45bf-9fc6-7ac751f8ed18",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:8081",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "33",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"email\": \"Amya16@gmail.com\"\n}"
+          }
+        },
+        "response": {
+          "id": "6a41131e-94b6-4ad5-babf-5564cfa9a6de",
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 14 Mar 2026 10:26:36 GMT"
+            },
+            {
+              "key": "Content-Length",
+              "value": "39"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              50,
+              49,
+              34,
+              44,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              65,
+              109,
+              121,
+              97,
+              49,
+              54,
+              64,
+              103,
+              109,
+              97,
+              105,
+              108,
+              46,
+              99,
+              111,
+              109,
+              34,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 231,
+          "responseSize": 39
+        },
+        "id": "f404a555-e2ae-4aa1-9b41-4d9367c473a6",
+        "assertions": [
+          {
+            "assertion": "Status code is 201",
+            "skipped": false
+          },
+          {
+            "assertion": "User has ID",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "1b6d839c-192c-4a57-a692-a5c303b5b5d1",
+          "length": 8,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "e10e5e01-fa76-440a-9858-748aaaa6868c"
+        },
+        "item": {
+          "id": "af9d189b-80eb-47b7-9c46-eb8f9e2d5c6e",
+          "name": "2. Deposit Money",
+          "request": {
+            "url": {
+              "path": [
+                "accounts",
+                "{{userId}}",
+                "deposit"
+              ],
+              "host": [
+                "{{billingUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 200\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "1d664313-3c56-43ac-88bc-15825815a7a7",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Balance updated to 200\", function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.balance).to.equal(200);",
+                  "    console.log(\"New balance:\", jsonData.balance);",
+                  "});"
+                ],
+                "_lastExecutionId": "8873db33-4914-4895-8631-b20bc8d38a80"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8083",
+            "path": [
+              "accounts",
+              "21",
+              "deposit"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "51a70699-4649-4273-a40f-c16bf0dc2ac2",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:8083",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "19",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"amount\": 200\n}"
+          }
+        },
+        "response": {
+          "id": "cebc81bc-654b-40b7-b543-240562f4c148",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 14 Mar 2026 10:26:36 GMT"
+            },
+            {
+              "key": "Content-Length",
+              "value": "31"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              117,
+              115,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              50,
+              49,
+              34,
+              44,
+              34,
+              98,
+              97,
+              108,
+              97,
+              110,
+              99,
+              101,
+              34,
+              58,
+              50,
+              48,
+              48,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 52,
+          "responseSize": 31
+        },
+        "id": "af9d189b-80eb-47b7-9c46-eb8f9e2d5c6e",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Balance updated to 200",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "e3b50485-e140-487e-a64b-fcacd77b31ad",
+          "length": 8,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "3c6ea494-c49d-4d0d-a166-d49d0db726ba"
+        },
+        "item": {
+          "id": "f81d44b9-a5db-4a92-b75f-441f05c30fe4",
+          "name": "3. Create Order (Success)",
+          "request": {
+            "url": {
+              "path": [
+                "orders"
+              ],
+              "host": [
+                "{{orderUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"amount\": 100,\n  \"email\": \"test@example.com\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b432baa5-82c9-43f9-ba7c-bf4895373455",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Order completed successfully\", function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.status).to.equal(\"completed\");",
+                  "    pm.variables.set(\"orderId\", jsonData.id);",
+                  "    console.log(\"Order ID:\", jsonData.id, \"Status:\", jsonData.status);",
+                  "});"
+                ],
+                "_lastExecutionId": "9cd0328d-a164-4a24-82d5-94b45f1c7c69"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8082",
+            "path": [
+              "orders"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "86be8db5-16a9-45fb-b021-ae34422738bf",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:8082",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "69",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"user_id\": \"21\",\n  \"amount\": 100,\n  \"email\": \"test@example.com\"\n}"
+          }
+        },
+        "response": {
+          "id": "d9bdaa03-e303-41de-b6e8-2f346960985e",
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 14 Mar 2026 10:26:36 GMT"
+            },
+            {
+              "key": "Content-Length",
+              "value": "88"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              52,
+              49,
+              34,
+              44,
+              34,
+              117,
+              115,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              50,
+              49,
+              34,
+              44,
+              34,
+              97,
+              109,
+              111,
+              117,
+              110,
+              116,
+              34,
+              58,
+              49,
+              48,
+              48,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              99,
+              111,
+              109,
+              112,
+              108,
+              101,
+              116,
+              101,
+              100,
+              34,
+              44,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              116,
+              101,
+              115,
+              116,
+              64,
+              101,
+              120,
+              97,
+              109,
+              112,
+              108,
+              101,
+              46,
+              99,
+              111,
+              109,
+              34,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 54,
+          "responseSize": 88
+        },
+        "id": "f81d44b9-a5db-4a92-b75f-441f05c30fe4",
+        "assertions": [
+          {
+            "assertion": "Status code is 201",
+            "skipped": false
+          },
+          {
+            "assertion": "Order completed successfully",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "e15612a9-bd39-4a27-a4d9-94accdbfdf71",
+          "length": 8,
+          "cycles": 1,
+          "position": 3,
+          "iteration": 0,
+          "httpRequestId": "a7796800-d16d-4f65-a586-1f6fe932490d"
+        },
+        "item": {
+          "id": "1ca10e85-63c3-4aef-a680-d7b1a2ca16a7",
+          "name": "4. Check Balance After Success",
+          "request": {
+            "url": {
+              "path": [
+                "accounts",
+                "{{userId}}"
+              ],
+              "host": [
+                "{{billingUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "eaf6f1f8-5dbe-4940-96c1-a84842db3b4b",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Balance reduced to 100\", function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.balance).to.equal(100);",
+                  "    console.log(\"Balance after order:\", jsonData.balance);",
+                  "});"
+                ],
+                "_lastExecutionId": "7195a12d-af7e-4395-b109-eb7c846a1ec1"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8083",
+            "path": [
+              "accounts",
+              "21"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "e0832cbb-20e0-4c35-a228-8cd93d0a3b8d",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:8083",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "7c5d58fc-ff29-41c2-9c3d-c38de3f27bce",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 14 Mar 2026 10:26:36 GMT"
+            },
+            {
+              "key": "Content-Length",
+              "value": "31"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              117,
+              115,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              50,
+              49,
+              34,
+              44,
+              34,
+              98,
+              97,
+              108,
+              97,
+              110,
+              99,
+              101,
+              34,
+              58,
+              49,
+              48,
+              48,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 10,
+          "responseSize": 31
+        },
+        "id": "1ca10e85-63c3-4aef-a680-d7b1a2ca16a7",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Balance reduced to 100",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "8d036a65-c82b-4bd7-b129-66b2f5256292",
+          "length": 8,
+          "cycles": 1,
+          "position": 4,
+          "iteration": 0,
+          "httpRequestId": "64ed461b-282e-41fd-b9f7-628f94b1a86f"
+        },
+        "item": {
+          "id": "e79bdda1-8ce0-4ed1-85d3-2c10c9a65a79",
+          "name": "5. Check Notifications After Success",
+          "request": {
+            "url": {
+              "path": [
+                "notifications"
+              ],
+              "host": [
+                "{{notificationUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{userId}}"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "d09cfad4-6cf3-4ba4-877a-cc9f5a4511f2",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "console.log(\"Raw notifications:\", JSON.stringify(jsonData));",
+                  "",
+                  "pm.test(\"Success notification received\", function() {",
+                  "    var found = false;",
+                  "    for (var i = 0; i < jsonData.length; i++) {",
+                  "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+                  "            found = true;",
+                  "            console.log(\"✅ Found success notification:\", jsonData[i].message);",
+                  "            break;",
+                  "        }",
+                  "    }",
+                  "    pm.expect(found, \"No success notification found\").to.be.true;",
+                  "});"
+                ],
+                "_lastExecutionId": "1079184d-0b15-4b33-8d5c-f4c37c62ffa1"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8084",
+            "path": [
+              "notifications"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [
+              {
+                "key": "user_id",
+                "value": "21"
+              }
+            ],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "b67b428b-b0c2-4cd2-beae-3ac2c2e44a93",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:8084",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "5c6078ff-68a1-4aa9-bfdc-79d5a20ed0dd",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 14 Mar 2026 10:26:36 GMT"
+            },
+            {
+              "key": "Content-Length",
+              "value": "5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              110,
+              117,
+              108,
+              108,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 161,
+          "responseSize": 5
+        },
+        "id": "e79bdda1-8ce0-4ed1-85d3-2c10c9a65a79",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Success notification received",
+            "skipped": false,
+            "error": {
+              "name": "TypeError",
+              "index": 1,
+              "test": "Success notification received",
+              "message": "Cannot read properties of null (reading 'length')",
+              "stack": "TypeError: Cannot read properties of null (reading 'length')\n   at Object.eval sandbox-script.js:2:5)"
+            }
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "33b9cfc9-e048-4fc3-8056-d0df7f46bec8",
+          "length": 8,
+          "cycles": 1,
+          "position": 5,
+          "iteration": 0,
+          "httpRequestId": "2d0905ff-72cb-44ef-ae5d-2cbb652aeec4"
+        },
+        "item": {
+          "id": "5379ef45-e55d-482d-9099-388f24eeef8e",
+          "name": "6. Create Order (Fail - Insufficient Funds)",
+          "request": {
+            "url": {
+              "path": [
+                "orders"
+              ],
+              "host": [
+                "{{orderUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"amount\": 200,\n  \"email\": \"test@example.com\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "38bbcded-c274-4bd5-a562-62586c28faff",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 402\", function() {",
+                  "    pm.response.to.have.status(402);",
+                  "});",
+                  "",
+                  "pm.test(\"Order failed - insufficient funds\", function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.status).to.equal(\"insufficient_funds\");",
+                  "    console.log(\"Failed order status:\", jsonData.status);",
+                  "});"
+                ],
+                "_lastExecutionId": "4131bac0-c818-4d4a-ae8e-ddc8d44c7dfa"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8082",
+            "path": [
+              "orders"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "406ed61e-1497-4770-84fe-3cfc88e0ce04",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:8082",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "69",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"user_id\": \"21\",\n  \"amount\": 200,\n  \"email\": \"test@example.com\"\n}"
+          }
+        },
+        "response": {
+          "id": "c134f255-dce6-448c-83ae-dfb08e1c56ba",
+          "status": "Payment Required",
+          "code": 402,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 14 Mar 2026 10:26:36 GMT"
+            },
+            {
+              "key": "Content-Length",
+              "value": "97"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              52,
+              50,
+              34,
+              44,
+              34,
+              117,
+              115,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              50,
+              49,
+              34,
+              44,
+              34,
+              97,
+              109,
+              111,
+              117,
+              110,
+              116,
+              34,
+              58,
+              50,
+              48,
+              48,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              105,
+              110,
+              115,
+              117,
+              102,
+              102,
+              105,
+              99,
+              105,
+              101,
+              110,
+              116,
+              95,
+              102,
+              117,
+              110,
+              100,
+              115,
+              34,
+              44,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              116,
+              101,
+              115,
+              116,
+              64,
+              101,
+              120,
+              97,
+              109,
+              112,
+              108,
+              101,
+              46,
+              99,
+              111,
+              109,
+              34,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 11,
+          "responseSize": 97
+        },
+        "id": "5379ef45-e55d-482d-9099-388f24eeef8e",
+        "assertions": [
+          {
+            "assertion": "Status code is 402",
+            "skipped": false
+          },
+          {
+            "assertion": "Order failed - insufficient funds",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "5cd692be-75a5-4fbf-a764-4f70bc8a96c3",
+          "length": 8,
+          "cycles": 1,
+          "position": 6,
+          "iteration": 0,
+          "httpRequestId": "c6e85246-743f-47d9-95ef-9fc6c9806d4f"
+        },
+        "item": {
+          "id": "16988441-7a89-455a-adbf-0f2c3973d288",
+          "name": "7. Check Balance Unchanged",
+          "request": {
+            "url": {
+              "path": [
+                "accounts",
+                "{{userId}}"
+              ],
+              "host": [
+                "{{billingUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "bc7036a4-3c03-41a7-921b-051e3e4eeca2",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Balance unchanged at 100\", function() {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.balance).to.equal(100);",
+                  "    console.log(\"Balance after failed order:\", jsonData.balance);",
+                  "});"
+                ],
+                "_lastExecutionId": "a437c673-59e7-43dc-a95c-c23b4b1b6aea"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8083",
+            "path": [
+              "accounts",
+              "21"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "f1afa7f0-cd30-46c4-bc5e-b8fb27c65edb",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:8083",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "120898e8-9d52-4859-ad48-dba131c8fa83",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 14 Mar 2026 10:26:36 GMT"
+            },
+            {
+              "key": "Content-Length",
+              "value": "31"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              117,
+              115,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              50,
+              49,
+              34,
+              44,
+              34,
+              98,
+              97,
+              108,
+              97,
+              110,
+              99,
+              101,
+              34,
+              58,
+              49,
+              48,
+              48,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 6,
+          "responseSize": 31
+        },
+        "id": "16988441-7a89-455a-adbf-0f2c3973d288",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Balance unchanged at 100",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "264520f5-e4d2-4157-af5f-40efcabdf7be",
+          "length": 8,
+          "cycles": 1,
+          "position": 7,
+          "iteration": 0,
+          "httpRequestId": "f5a69dc0-1735-4617-b225-5f7cb0f53f5a"
+        },
+        "item": {
+          "id": "a8c698fb-48dd-4baa-8127-3c99916c74d7",
+          "name": "8. Check Notifications After Fail",
+          "request": {
+            "url": {
+              "path": [
+                "notifications"
+              ],
+              "host": [
+                "{{notificationUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{userId}}"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "7fed9a01-57b0-4b73-9d69-99690cbfcff5",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "console.log(\"Final notifications:\", JSON.stringify(jsonData));",
+                  "",
+                  "pm.test(\"Both success and failure notifications received\", function() {",
+                  "    var foundSuccess = false;",
+                  "    var foundFail = false;",
+                  "    for (var i = 0; i < jsonData.length; i++) {",
+                  "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+                  "            foundSuccess = true;",
+                  "            console.log(\"✅ Found success:\", jsonData[i].message);",
+                  "        }",
+                  "        if (jsonData[i].message && jsonData[i].message.includes('недостаточно')) {",
+                  "            foundFail = true;",
+                  "            console.log(\"✅ Found fail:\", jsonData[i].message);",
+                  "        }",
+                  "    }",
+                  "    pm.expect(foundSuccess, \"No success notification\").to.be.true;",
+                  "    pm.expect(foundFail, \"No fail notification\").to.be.true;",
+                  "});"
+                ],
+                "_lastExecutionId": "baf23cef-a9b9-4cf7-960f-a650ee4a25a8"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8084",
+            "path": [
+              "notifications"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [
+              {
+                "key": "user_id",
+                "value": "21"
+              }
+            ],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "6ae603e2-07da-491a-bd2c-c6196d706f8a",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:8084",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "71ebd165-8b4a-4671-b110-c11a086a5f74",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 14 Mar 2026 10:26:36 GMT"
+            },
+            {
+              "key": "Content-Length",
+              "value": "208"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              91,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              52,
+              56,
+              44,
+              34,
+              117,
+              115,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              50,
+              49,
+              34,
+              44,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              116,
+              101,
+              115,
+              116,
+              64,
+              101,
+              120,
+              97,
+              109,
+              112,
+              108,
+              101,
+              46,
+              99,
+              111,
+              109,
+              34,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              208,
+              151,
+              208,
+              176,
+              208,
+              186,
+              208,
+              176,
+              208,
+              183,
+              32,
+              52,
+              49,
+              32,
+              209,
+              131,
+              209,
+              129,
+              208,
+              191,
+              208,
+              181,
+              209,
+              136,
+              208,
+              189,
+              208,
+              190,
+              32,
+              208,
+              190,
+              209,
+              132,
+              208,
+              190,
+              209,
+              128,
+              208,
+              188,
+              208,
+              187,
+              208,
+              181,
+              208,
+              189,
+              33,
+              32,
+              208,
+              161,
+              208,
+              191,
+              208,
+              176,
+              209,
+              129,
+              208,
+              184,
+              208,
+              177,
+              208,
+              190,
+              32,
+              208,
+              183,
+              208,
+              176,
+              32,
+              208,
+              191,
+              208,
+              190,
+              208,
+              186,
+              209,
+              131,
+              208,
+              191,
+              208,
+              186,
+              209,
+              131,
+              33,
+              34,
+              44,
+              34,
+              99,
+              114,
+              101,
+              97,
+              116,
+              101,
+              100,
+              95,
+              97,
+              116,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              54,
+              45,
+              48,
+              51,
+              45,
+              49,
+              52,
+              84,
+              49,
+              48,
+              58,
+              50,
+              54,
+              58,
+              51,
+              54,
+              46,
+              53,
+              57,
+              51,
+              54,
+              48,
+              53,
+              90,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              115,
+              101,
+              110,
+              116,
+              34,
+              125,
+              93,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 21,
+          "responseSize": 208
+        },
+        "id": "a8c698fb-48dd-4baa-8127-3c99916c74d7",
+        "assertions": [
+          {
+            "assertion": "Status code is 200",
+            "skipped": false
+          },
+          {
+            "assertion": "Both success and failure notifications received",
+            "skipped": false,
+            "error": {
+              "name": "AssertionError",
+              "index": 1,
+              "test": "Both success and failure notifications received",
+              "message": "No fail notification: expected false to be true",
+              "stack": "AssertionError: No fail notification: expected false to be true\n   at Object.eval sandbox-script.js:2:8)"
+            }
+          }
+        ]
+      }
+    ],
+    "transfers": {
+      "responseTotal": 530
+    },
+    "failures": [
+      {
+        "error": {
+          "name": "TypeError",
+          "index": 1,
+          "test": "Success notification received",
+          "message": "Cannot read properties of null (reading 'length')",
+          "stack": "TypeError: Cannot read properties of null (reading 'length')\n   at Object.eval sandbox-script.js:2:5)",
+          "checksum": "cfdf200283accd4f35522fc4f50a48e5",
+          "id": "02a0222c-34f8-49b6-9000-b9f146cbd14d",
+          "timestamp": 1773483996619,
+          "stacktrace": [
+            {
+              "fileName": "sandbox-script.js",
+              "lineNumber": 2,
+              "functionName": "Object.eval",
+              "typeName": "Object",
+              "methodName": "eval",
+              "columnNumber": 5,
+              "native": false
+            }
+          ]
+        },
+        "at": "assertion:1 in test-script",
+        "source": {
+          "id": "e79bdda1-8ce0-4ed1-85d3-2c10c9a65a79",
+          "name": "5. Check Notifications After Success",
+          "request": {
+            "url": {
+              "path": [
+                "notifications"
+              ],
+              "host": [
+                "{{notificationUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{userId}}"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "d09cfad4-6cf3-4ba4-877a-cc9f5a4511f2",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "console.log(\"Raw notifications:\", JSON.stringify(jsonData));",
+                  "",
+                  "pm.test(\"Success notification received\", function() {",
+                  "    var found = false;",
+                  "    for (var i = 0; i < jsonData.length; i++) {",
+                  "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+                  "            found = true;",
+                  "            console.log(\"✅ Found success notification:\", jsonData[i].message);",
+                  "            break;",
+                  "        }",
+                  "    }",
+                  "    pm.expect(found, \"No success notification found\").to.be.true;",
+                  "});"
+                ],
+                "_lastExecutionId": "1079184d-0b15-4b33-8d5c-f4c37c62ffa1"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "item": [
+            {
+              "id": "f404a555-e2ae-4aa1-9b41-4d9367c473a6",
+              "name": "1. Create User",
+              "request": {
+                "url": {
+                  "path": [
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{$randomEmail}}\"\n}"
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "0a74fb94-80fb-437a-9775-708afd48de66",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function() {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"User has ID\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.id).to.not.be.empty;",
+                      "    pm.variables.set(\"userId\", jsonData.id);",
+                      "    console.log(\"User ID:\", jsonData.id);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "b6e0a38c-2904-4dba-85ed-d4b08d318829"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "af9d189b-80eb-47b7-9c46-eb8f9e2d5c6e",
+              "name": "2. Deposit Money",
+              "request": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "{{userId}}",
+                    "deposit"
+                  ],
+                  "host": [
+                    "{{billingUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 200\n}"
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "1d664313-3c56-43ac-88bc-15825815a7a7",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Balance updated to 200\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.balance).to.equal(200);",
+                      "    console.log(\"New balance:\", jsonData.balance);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "8873db33-4914-4895-8631-b20bc8d38a80"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f81d44b9-a5db-4a92-b75f-441f05c30fe4",
+              "name": "3. Create Order (Success)",
+              "request": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{orderUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"amount\": 100,\n  \"email\": \"test@example.com\"\n}"
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "b432baa5-82c9-43f9-ba7c-bf4895373455",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function() {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Order completed successfully\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.status).to.equal(\"completed\");",
+                      "    pm.variables.set(\"orderId\", jsonData.id);",
+                      "    console.log(\"Order ID:\", jsonData.id, \"Status:\", jsonData.status);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "9cd0328d-a164-4a24-82d5-94b45f1c7c69"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "1ca10e85-63c3-4aef-a680-d7b1a2ca16a7",
+              "name": "4. Check Balance After Success",
+              "request": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "{{userId}}"
+                  ],
+                  "host": [
+                    "{{billingUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "eaf6f1f8-5dbe-4940-96c1-a84842db3b4b",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Balance reduced to 100\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.balance).to.equal(100);",
+                      "    console.log(\"Balance after order:\", jsonData.balance);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "7195a12d-af7e-4395-b109-eb7c846a1ec1"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "e79bdda1-8ce0-4ed1-85d3-2c10c9a65a79",
+              "name": "5. Check Notifications After Success",
+              "request": {
+                "url": {
+                  "path": [
+                    "notifications"
+                  ],
+                  "host": [
+                    "{{notificationUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_id",
+                      "value": "{{userId}}"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "d09cfad4-6cf3-4ba4-877a-cc9f5a4511f2",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "console.log(\"Raw notifications:\", JSON.stringify(jsonData));",
+                      "",
+                      "pm.test(\"Success notification received\", function() {",
+                      "    var found = false;",
+                      "    for (var i = 0; i < jsonData.length; i++) {",
+                      "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+                      "            found = true;",
+                      "            console.log(\"✅ Found success notification:\", jsonData[i].message);",
+                      "            break;",
+                      "        }",
+                      "    }",
+                      "    pm.expect(found, \"No success notification found\").to.be.true;",
+                      "});"
+                    ],
+                    "_lastExecutionId": "1079184d-0b15-4b33-8d5c-f4c37c62ffa1"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "5379ef45-e55d-482d-9099-388f24eeef8e",
+              "name": "6. Create Order (Fail - Insufficient Funds)",
+              "request": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{orderUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"amount\": 200,\n  \"email\": \"test@example.com\"\n}"
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "38bbcded-c274-4bd5-a562-62586c28faff",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 402\", function() {",
+                      "    pm.response.to.have.status(402);",
+                      "});",
+                      "",
+                      "pm.test(\"Order failed - insufficient funds\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.status).to.equal(\"insufficient_funds\");",
+                      "    console.log(\"Failed order status:\", jsonData.status);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "4131bac0-c818-4d4a-ae8e-ddc8d44c7dfa"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "16988441-7a89-455a-adbf-0f2c3973d288",
+              "name": "7. Check Balance Unchanged",
+              "request": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "{{userId}}"
+                  ],
+                  "host": [
+                    "{{billingUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "bc7036a4-3c03-41a7-921b-051e3e4eeca2",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Balance unchanged at 100\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.balance).to.equal(100);",
+                      "    console.log(\"Balance after failed order:\", jsonData.balance);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "a437c673-59e7-43dc-a95c-c23b4b1b6aea"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "a8c698fb-48dd-4baa-8127-3c99916c74d7",
+              "name": "8. Check Notifications After Fail",
+              "request": {
+                "url": {
+                  "path": [
+                    "notifications"
+                  ],
+                  "host": [
+                    "{{notificationUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_id",
+                      "value": "{{userId}}"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "7fed9a01-57b0-4b73-9d69-99690cbfcff5",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "console.log(\"Final notifications:\", JSON.stringify(jsonData));",
+                      "",
+                      "pm.test(\"Both success and failure notifications received\", function() {",
+                      "    var foundSuccess = false;",
+                      "    var foundFail = false;",
+                      "    for (var i = 0; i < jsonData.length; i++) {",
+                      "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+                      "            foundSuccess = true;",
+                      "            console.log(\"✅ Found success:\", jsonData[i].message);",
+                      "        }",
+                      "        if (jsonData[i].message && jsonData[i].message.includes('недостаточно')) {",
+                      "            foundFail = true;",
+                      "            console.log(\"✅ Found fail:\", jsonData[i].message);",
+                      "        }",
+                      "    }",
+                      "    pm.expect(foundSuccess, \"No success notification\").to.be.true;",
+                      "    pm.expect(foundFail, \"No fail notification\").to.be.true;",
+                      "});"
+                    ],
+                    "_lastExecutionId": "baf23cef-a9b9-4cf7-960f-a650ee4a25a8"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [
+            {
+              "type": "any",
+              "value": "localhost:8081",
+              "key": "baseUrl"
+            },
+            {
+              "type": "any",
+              "value": "localhost:8082",
+              "key": "orderUrl"
+            },
+            {
+              "type": "any",
+              "value": "localhost:8083",
+              "key": "billingUrl"
+            },
+            {
+              "type": "any",
+              "value": "localhost:8084",
+              "key": "notificationUrl"
+            }
+          ],
+          "info": {
+            "_postman_id": "258ee6c1-f3ab-4b78-9c98-ddc5ca951a42",
+            "name": "Microservices Architecture Tests",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "ref": "8d036a65-c82b-4bd7-b129-66b2f5256292",
+          "length": 8,
+          "cycles": 1,
+          "position": 4,
+          "iteration": 0,
+          "httpRequestId": "64ed461b-282e-41fd-b9f7-628f94b1a86f",
+          "scriptId": "d09cfad4-6cf3-4ba4-877a-cc9f5a4511f2",
+          "execution": "1079184d-0b15-4b33-8d5c-f4c37c62ffa1"
+        }
+      },
+      {
+        "error": {
+          "name": "AssertionError",
+          "index": 1,
+          "test": "Both success and failure notifications received",
+          "message": "No fail notification: expected false to be true",
+          "stack": "AssertionError: No fail notification: expected false to be true\n   at Object.eval sandbox-script.js:2:8)",
+          "checksum": "2852dac666681687453da7c3e3e8609c",
+          "id": "4104a777-5c9f-498d-a704-fb3011586a40",
+          "timestamp": 1773483996754,
+          "stacktrace": [
+            {
+              "fileName": "sandbox-script.js",
+              "lineNumber": 2,
+              "functionName": "Object.eval",
+              "typeName": "Object",
+              "methodName": "eval",
+              "columnNumber": 8,
+              "native": false
+            }
+          ]
+        },
+        "at": "assertion:1 in test-script",
+        "source": {
+          "id": "a8c698fb-48dd-4baa-8127-3c99916c74d7",
+          "name": "8. Check Notifications After Fail",
+          "request": {
+            "url": {
+              "path": [
+                "notifications"
+              ],
+              "host": [
+                "{{notificationUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{userId}}"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "7fed9a01-57b0-4b73-9d69-99690cbfcff5",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "console.log(\"Final notifications:\", JSON.stringify(jsonData));",
+                  "",
+                  "pm.test(\"Both success and failure notifications received\", function() {",
+                  "    var foundSuccess = false;",
+                  "    var foundFail = false;",
+                  "    for (var i = 0; i < jsonData.length; i++) {",
+                  "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+                  "            foundSuccess = true;",
+                  "            console.log(\"✅ Found success:\", jsonData[i].message);",
+                  "        }",
+                  "        if (jsonData[i].message && jsonData[i].message.includes('недостаточно')) {",
+                  "            foundFail = true;",
+                  "            console.log(\"✅ Found fail:\", jsonData[i].message);",
+                  "        }",
+                  "    }",
+                  "    pm.expect(foundSuccess, \"No success notification\").to.be.true;",
+                  "    pm.expect(foundFail, \"No fail notification\").to.be.true;",
+                  "});"
+                ],
+                "_lastExecutionId": "baf23cef-a9b9-4cf7-960f-a650ee4a25a8"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "item": [
+            {
+              "id": "f404a555-e2ae-4aa1-9b41-4d9367c473a6",
+              "name": "1. Create User",
+              "request": {
+                "url": {
+                  "path": [
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{$randomEmail}}\"\n}"
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "0a74fb94-80fb-437a-9775-708afd48de66",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function() {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"User has ID\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.id).to.not.be.empty;",
+                      "    pm.variables.set(\"userId\", jsonData.id);",
+                      "    console.log(\"User ID:\", jsonData.id);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "b6e0a38c-2904-4dba-85ed-d4b08d318829"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "af9d189b-80eb-47b7-9c46-eb8f9e2d5c6e",
+              "name": "2. Deposit Money",
+              "request": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "{{userId}}",
+                    "deposit"
+                  ],
+                  "host": [
+                    "{{billingUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 200\n}"
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "1d664313-3c56-43ac-88bc-15825815a7a7",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Balance updated to 200\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.balance).to.equal(200);",
+                      "    console.log(\"New balance:\", jsonData.balance);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "8873db33-4914-4895-8631-b20bc8d38a80"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f81d44b9-a5db-4a92-b75f-441f05c30fe4",
+              "name": "3. Create Order (Success)",
+              "request": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{orderUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"amount\": 100,\n  \"email\": \"test@example.com\"\n}"
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "b432baa5-82c9-43f9-ba7c-bf4895373455",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function() {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Order completed successfully\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.status).to.equal(\"completed\");",
+                      "    pm.variables.set(\"orderId\", jsonData.id);",
+                      "    console.log(\"Order ID:\", jsonData.id, \"Status:\", jsonData.status);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "9cd0328d-a164-4a24-82d5-94b45f1c7c69"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "1ca10e85-63c3-4aef-a680-d7b1a2ca16a7",
+              "name": "4. Check Balance After Success",
+              "request": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "{{userId}}"
+                  ],
+                  "host": [
+                    "{{billingUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "eaf6f1f8-5dbe-4940-96c1-a84842db3b4b",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Balance reduced to 100\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.balance).to.equal(100);",
+                      "    console.log(\"Balance after order:\", jsonData.balance);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "7195a12d-af7e-4395-b109-eb7c846a1ec1"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "e79bdda1-8ce0-4ed1-85d3-2c10c9a65a79",
+              "name": "5. Check Notifications After Success",
+              "request": {
+                "url": {
+                  "path": [
+                    "notifications"
+                  ],
+                  "host": [
+                    "{{notificationUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_id",
+                      "value": "{{userId}}"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "d09cfad4-6cf3-4ba4-877a-cc9f5a4511f2",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "console.log(\"Raw notifications:\", JSON.stringify(jsonData));",
+                      "",
+                      "pm.test(\"Success notification received\", function() {",
+                      "    var found = false;",
+                      "    for (var i = 0; i < jsonData.length; i++) {",
+                      "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+                      "            found = true;",
+                      "            console.log(\"✅ Found success notification:\", jsonData[i].message);",
+                      "            break;",
+                      "        }",
+                      "    }",
+                      "    pm.expect(found, \"No success notification found\").to.be.true;",
+                      "});"
+                    ],
+                    "_lastExecutionId": "1079184d-0b15-4b33-8d5c-f4c37c62ffa1"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "5379ef45-e55d-482d-9099-388f24eeef8e",
+              "name": "6. Create Order (Fail - Insufficient Funds)",
+              "request": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{orderUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"amount\": 200,\n  \"email\": \"test@example.com\"\n}"
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "38bbcded-c274-4bd5-a562-62586c28faff",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 402\", function() {",
+                      "    pm.response.to.have.status(402);",
+                      "});",
+                      "",
+                      "pm.test(\"Order failed - insufficient funds\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.status).to.equal(\"insufficient_funds\");",
+                      "    console.log(\"Failed order status:\", jsonData.status);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "4131bac0-c818-4d4a-ae8e-ddc8d44c7dfa"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "16988441-7a89-455a-adbf-0f2c3973d288",
+              "name": "7. Check Balance Unchanged",
+              "request": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "{{userId}}"
+                  ],
+                  "host": [
+                    "{{billingUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "bc7036a4-3c03-41a7-921b-051e3e4eeca2",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Balance unchanged at 100\", function() {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.balance).to.equal(100);",
+                      "    console.log(\"Balance after failed order:\", jsonData.balance);",
+                      "});"
+                    ],
+                    "_lastExecutionId": "a437c673-59e7-43dc-a95c-c23b4b1b6aea"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "a8c698fb-48dd-4baa-8127-3c99916c74d7",
+              "name": "8. Check Notifications After Fail",
+              "request": {
+                "url": {
+                  "path": [
+                    "notifications"
+                  ],
+                  "host": [
+                    "{{notificationUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_id",
+                      "value": "{{userId}}"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "7fed9a01-57b0-4b73-9d69-99690cbfcff5",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function() {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "var jsonData = pm.response.json();",
+                      "console.log(\"Final notifications:\", JSON.stringify(jsonData));",
+                      "",
+                      "pm.test(\"Both success and failure notifications received\", function() {",
+                      "    var foundSuccess = false;",
+                      "    var foundFail = false;",
+                      "    for (var i = 0; i < jsonData.length; i++) {",
+                      "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+                      "            foundSuccess = true;",
+                      "            console.log(\"✅ Found success:\", jsonData[i].message);",
+                      "        }",
+                      "        if (jsonData[i].message && jsonData[i].message.includes('недостаточно')) {",
+                      "            foundFail = true;",
+                      "            console.log(\"✅ Found fail:\", jsonData[i].message);",
+                      "        }",
+                      "    }",
+                      "    pm.expect(foundSuccess, \"No success notification\").to.be.true;",
+                      "    pm.expect(foundFail, \"No fail notification\").to.be.true;",
+                      "});"
+                    ],
+                    "_lastExecutionId": "baf23cef-a9b9-4cf7-960f-a650ee4a25a8"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [
+            {
+              "type": "any",
+              "value": "localhost:8081",
+              "key": "baseUrl"
+            },
+            {
+              "type": "any",
+              "value": "localhost:8082",
+              "key": "orderUrl"
+            },
+            {
+              "type": "any",
+              "value": "localhost:8083",
+              "key": "billingUrl"
+            },
+            {
+              "type": "any",
+              "value": "localhost:8084",
+              "key": "notificationUrl"
+            }
+          ],
+          "info": {
+            "_postman_id": "258ee6c1-f3ab-4b78-9c98-ddc5ca951a42",
+            "name": "Microservices Architecture Tests",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "ref": "264520f5-e4d2-4157-af5f-40efcabdf7be",
+          "length": 8,
+          "cycles": 1,
+          "position": 7,
+          "iteration": 0,
+          "httpRequestId": "f5a69dc0-1735-4617-b225-5f7cb0f53f5a",
+          "scriptId": "7fed9a01-57b0-4b73-9d69-99690cbfcff5",
+          "execution": "baf23cef-a9b9-4cf7-960f-a650ee4a25a8"
+        }
+      }
+    ],
+    "error": null
+  }
+}

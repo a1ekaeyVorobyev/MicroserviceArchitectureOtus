@@ -1,0 +1,36 @@
+{
+  "info": {
+    "name": "arch-tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/users"
+      }
+    },
+    {
+      "name": "Deposit",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/accounts/1/deposit"
+      }
+    },
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/orders"
+      }
+    },
+    {
+      "name": "Get Notifications",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/notifications"
+      }
+    }
+  ]
+}

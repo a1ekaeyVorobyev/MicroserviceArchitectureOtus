@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: user-service
+spec:
+  replicas: {{ .Values.user.replicaCount }}
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - name: user
+        image: "{{ .Values.user.image }}"
+        imagePullPolicy: {{ .Values.user.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.user.service.port }}
+        env:
+        {{- range .Values.user.env }}
+        - name: {{ .name }}
+          value: {{ .value }}
+        {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: {{ .Values.user.service.type }}
+  ports:
+  - port: {{ .Values.user.service.port }}
+    targetPort: {{ .Values.user.service.port }}
+  selector:
+    app: user-service

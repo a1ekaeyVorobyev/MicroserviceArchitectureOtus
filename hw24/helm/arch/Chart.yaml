@@ -1,0 +1,16 @@
+
+apiVersion: v2
+name: arch
+description: Microservices Architecture Homework - Services for Order, Billing, Notification
+type: application
+version: 0.1.0
+appVersion: 1.0.0
+keywords:
+  - microservices
+  - order
+  - billing
+  - notification
+  - user
+maintainers:
+  - name: a1ekseyramblerru
+    email: a1eksey@rambler.ru

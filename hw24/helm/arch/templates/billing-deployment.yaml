@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-service
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: billing-service
+spec:
+  replicas: {{ .Values.billing.replicaCount }}
+  selector:
+    matchLabels:
+      app: billing-service
+  template:
+    metadata:
+      labels:
+        app: billing-service
+    spec:
+      containers:
+      - name: billing
+        image: "{{ .Values.billing.image }}"
+        imagePullPolicy: {{ .Values.billing.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.billing.service.port }}
+        env:
+        {{- range .Values.billing.env }}
+        - name: {{ .name }}
+          value: {{ .value }}
+        {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: billing-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: {{ .Values.billing.service.type }}
+  ports:
+  - port: {{ .Values.billing.service.port }}
+    targetPort: {{ .Values.billing.service.port }}
+  selector:
+    app: billing-service

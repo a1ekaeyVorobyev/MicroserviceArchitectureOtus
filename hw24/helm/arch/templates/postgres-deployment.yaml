@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-notification
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: postgres-notification
+spec:
+  replicas: {{ .Values.postgres.replicaCount }}
+  selector:
+    matchLabels:
+      app: postgres-notification
+  template:
+    metadata:
+      labels:
+        app: postgres-notification
+    spec:
+      containers:
+      - name: postgres
+        image: {{ .Values.postgres.image }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: {{ .Values.postgres.service.port }}
+          name: postgres
+        env:
+        - name: POSTGRES_DB
+          value: {{ .Values.postgres.database.name }}
+        - name: POSTGRES_USER
+          value: {{ .Values.postgres.database.user }}
+        - name: POSTGRES_PASSWORD
+          value: {{ .Values.postgres.database.password }}
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d/
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - {{ .Values.postgres.database.user }}
+            - -d
+            - {{ .Values.postgres.database.name }}
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - {{ .Values.postgres.database.user }}
+            - -d
+            - {{ .Values.postgres.database.name }}
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+      volumes:
+      - name: postgres-storage
+        emptyDir: {}
+      - name: init-script
+        configMap:
+          name: postgres-init-sql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-notification
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: postgres-notification
+spec:
+  type: {{ .Values.postgres.service.type }}
+  ports:
+  - port: {{ .Values.postgres.service.port }}
+    targetPort: postgres
+    protocol: TCP
+    name: postgres
+  selector:
+    app: postgres-notification

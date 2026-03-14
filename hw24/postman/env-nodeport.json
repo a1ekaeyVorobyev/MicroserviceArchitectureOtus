@@ -1,0 +1,47 @@
+{
+  "name": "arch-env-nodeport",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "192.168.58.2:32597",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "userUrl",
+      "value": "192.168.58.2:32597",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "orderUrl",
+      "value": "192.168.58.2:32597",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "billingUrl",
+      "value": "192.168.58.2:32597",
+      "type": "default", 
+      "enabled": true
+    },
+    {
+      "key": "notificationUrl",
+      "value": "192.168.58.2:32597",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "userId",
+      "value": "1",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "email",
+      "value": "test@example.com",
+      "type": "default",
+      "enabled": true
+    }
+  ]
+}

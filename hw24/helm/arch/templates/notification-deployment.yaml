@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: notification-service
+spec:
+  replicas: {{ .Values.notification.replicaCount }}
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+      - name: notification
+        image: "{{ .Values.notification.image }}"
+        imagePullPolicy: {{ .Values.notification.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.notification.service.port }}
+        env:
+        - name: SERVICE_NAME
+          value: "notification"
+        - name: DB_HOST
+          value: "postgres-notification"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "notifications"
+        - name: DB_USER
+          value: "notification_user"
+        - name: DB_PASSWORD
+          value: "notification_password"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: {{ .Values.notification.service.type }}
+  ports:
+  - port: {{ .Values.notification.service.port }}
+    targetPort: {{ .Values.notification.service.port }}
+  selector:
+    app: notification-service

@@ -1,0 +1,71 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: arch-ingress
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - path: /user
+        pathType: Exact
+        backend:
+          service:
+            name: user-service
+            port:
+              number: {{ .Values.user.service.port }}
+      - path: /user/(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: user-service
+            port:
+              number: {{ .Values.user.service.port }}
+      - path: /order
+        pathType: Exact
+        backend:
+          service:
+            name: order-service
+            port:
+              number: {{ .Values.order.service.port }}
+      - path: /order/(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: order-service
+            port:
+              number: {{ .Values.order.service.port }}
+      - path: /billing
+        pathType: Exact
+        backend:
+          service:
+            name: billing-service
+            port:
+              number: {{ .Values.billing.service.port }}
+      - path: /billing/(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: billing-service
+            port:
+              number: {{ .Values.billing.service.port }}
+      - path: /notification
+        pathType: Exact
+        backend:
+          service:
+            name: notification-service
+            port:
+              number: {{ .Values.notification.service.port }}
+      - path: /notification/(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: notification-service
+            port:
+              number: {{ .Values.notification.service.port }}
+{{- end }}

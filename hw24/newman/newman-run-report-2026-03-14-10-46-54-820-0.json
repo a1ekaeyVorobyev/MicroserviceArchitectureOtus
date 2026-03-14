@@ -1,0 +1,1259 @@
+{
+  "collection": {
+    "item": [
+      {
+        "id": "de9905f2-651c-4534-a650-76182154e467",
+        "name": "Check Balance",
+        "request": {
+          "url": {
+            "path": [
+              "accounts",
+              "33"
+            ],
+            "host": [
+              "{{billingUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "11f7f97c-8ae4-4d13-8008-7eaa6a21aa5b",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                "const data = pm.response.json();",
+                "pm.test(\"Balance 100\", () => pm.expect(data.balance).to.equal(100));"
+              ],
+              "_lastExecutionId": "e338e06e-07e7-48f7-b714-9790ee0875d2"
+            }
+          }
+        ]
+      },
+      {
+        "id": "361963fb-9d07-42fa-8b05-9b8b297957fd",
+        "name": "Check Notifications",
+        "request": {
+          "url": {
+            "path": [
+              "notifications"
+            ],
+            "host": [
+              "{{notificationUrl}}"
+            ],
+            "query": [
+              {
+                "key": "user_id",
+                "value": "33"
+              }
+            ],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "c3cbcb4e-71aa-468d-8631-f8c8504e9573",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                "const data = pm.response.json() || [];",
+                "console.log(\"Notifications:\", JSON.stringify(data, null, 2));",
+                "",
+                "const hasSuccess = data.some(n => n.message && n.message.includes('успешно'));",
+                "const hasFail = data.some(n => n.message && n.message.includes('недостаточно'));",
+                "",
+                "pm.test(\"Has success notification\", () => pm.expect(hasSuccess).to.be.true);",
+                "pm.test(\"Has fail notification\", () => pm.expect(hasFail).to.be.true);",
+                "",
+                "console.log(\"✅ Success:\", hasSuccess);",
+                "console.log(\"✅ Fail:\", hasFail);"
+              ],
+              "_lastExecutionId": "0fa7bd5b-b35a-46aa-9847-e599a528803d"
+            }
+          }
+        ]
+      }
+    ],
+    "event": [],
+    "variable": [
+      {
+        "type": "any",
+        "value": "localhost:8083",
+        "key": "billingUrl"
+      },
+      {
+        "type": "any",
+        "value": "localhost:8084",
+        "key": "notificationUrl"
+      }
+    ],
+    "info": {
+      "_postman_id": "eaf02bf1-d9d1-4039-9204-d1e065e7ea6e",
+      "name": "Final Test",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    }
+  },
+  "environment": {
+    "id": "934eff6e-8dfa-473c-bd4c-c9273a0c720b",
+    "values": []
+  },
+  "globals": {
+    "id": "22a46cb1-db85-4004-a0d4-13573b33d15a",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 2,
+        "pending": 0,
+        "failed": 2
+      },
+      "prerequests": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 2,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      },
+      "testScripts": {
+        "total": 2,
+        "pending": 0,
+        "failed": 2
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 41,
+      "responseMin": 36,
+      "responseMax": 46,
+      "responseSd": 5,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1773485214658,
+      "completed": 1773485214818
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 2,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "250d9010-7253-46cd-bcf0-02c0f7578da6",
+          "httpRequestId": "2c8df365-e590-456b-9e15-a60db443a04b"
+        },
+        "item": {
+          "id": "de9905f2-651c-4534-a650-76182154e467",
+          "name": "Check Balance",
+          "request": {
+            "url": {
+              "path": [
+                "accounts",
+                "33"
+              ],
+              "host": [
+                "{{billingUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "11f7f97c-8ae4-4d13-8008-7eaa6a21aa5b",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "const data = pm.response.json();",
+                  "pm.test(\"Balance 100\", () => pm.expect(data.balance).to.equal(100));"
+                ],
+                "_lastExecutionId": "e338e06e-07e7-48f7-b714-9790ee0875d2"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8083",
+            "path": [
+              "accounts",
+              "33"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "91f6ddf4-a7ca-45ae-9dca-cad8c9443dc6",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:8083",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "0bf9919e-90bb-4d10-9375-618cccaf5b76",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 14 Mar 2026 10:46:54 GMT"
+            },
+            {
+              "key": "Content-Length",
+              "value": "31"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              117,
+              115,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              51,
+              51,
+              34,
+              44,
+              34,
+              98,
+              97,
+              108,
+              97,
+              110,
+              99,
+              101,
+              34,
+              58,
+              49,
+              48,
+              48,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 46,
+          "responseSize": 31
+        },
+        "id": "de9905f2-651c-4534-a650-76182154e467",
+        "testScript": [
+          {
+            "error": {
+              "type": "Error",
+              "name": "SyntaxError",
+              "message": "Identifier 'data' has already been declared",
+              "checksum": "36a30bff55cab1108d3140517a1e4348",
+              "id": "18902248-128d-4171-885f-69fe02a151f1",
+              "timestamp": 1773485214751,
+              "stacktrace": []
+            }
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "4d925187-c8e0-4c99-b903-b68bd81fc37c",
+          "length": 2,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "1dee2e28-79a1-4ce7-83d3-c935563545c1"
+        },
+        "item": {
+          "id": "361963fb-9d07-42fa-8b05-9b8b297957fd",
+          "name": "Check Notifications",
+          "request": {
+            "url": {
+              "path": [
+                "notifications"
+              ],
+              "host": [
+                "{{notificationUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "33"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "c3cbcb4e-71aa-468d-8631-f8c8504e9573",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "const data = pm.response.json() || [];",
+                  "console.log(\"Notifications:\", JSON.stringify(data, null, 2));",
+                  "",
+                  "const hasSuccess = data.some(n => n.message && n.message.includes('успешно'));",
+                  "const hasFail = data.some(n => n.message && n.message.includes('недостаточно'));",
+                  "",
+                  "pm.test(\"Has success notification\", () => pm.expect(hasSuccess).to.be.true);",
+                  "pm.test(\"Has fail notification\", () => pm.expect(hasFail).to.be.true);",
+                  "",
+                  "console.log(\"✅ Success:\", hasSuccess);",
+                  "console.log(\"✅ Fail:\", hasFail);"
+                ],
+                "_lastExecutionId": "0fa7bd5b-b35a-46aa-9847-e599a528803d"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "8084",
+            "path": [
+              "notifications"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [
+              {
+                "key": "user_id",
+                "value": "33"
+              }
+            ],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "13a12ee3-7972-4994-8734-f11796f17c91",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:8084",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "0bc88d66-58c8-41c6-8d05-7e78d4ae5d99",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 14 Mar 2026 10:46:54 GMT"
+            },
+            {
+              "key": "Content-Length",
+              "value": "412"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              91,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              55,
+              50,
+              44,
+              34,
+              117,
+              115,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              51,
+              51,
+              34,
+              44,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              102,
+              105,
+              110,
+              97,
+              108,
+              95,
+              116,
+              101,
+              115,
+              116,
+              64,
+              101,
+              120,
+              97,
+              109,
+              112,
+              108,
+              101,
+              46,
+              99,
+              111,
+              109,
+              34,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              208,
+              151,
+              208,
+              176,
+              208,
+              186,
+              208,
+              176,
+              208,
+              183,
+              32,
+              54,
+              53,
+              58,
+              32,
+              208,
+              189,
+              208,
+              181,
+              208,
+              180,
+              208,
+              190,
+              209,
+              129,
+              209,
+              130,
+              208,
+              176,
+              209,
+              130,
+              208,
+              190,
+              209,
+              135,
+              208,
+              189,
+              208,
+              190,
+              32,
+              209,
+              129,
+              209,
+              128,
+              208,
+              181,
+              208,
+              180,
+              209,
+              129,
+              209,
+              130,
+              208,
+              178,
+              32,
+              208,
+              189,
+              208,
+              176,
+              32,
+              209,
+              129,
+              209,
+              135,
+              208,
+              181,
+              209,
+              130,
+              208,
+              181,
+              34,
+              44,
+              34,
+              99,
+              114,
+              101,
+              97,
+              116,
+              101,
+              100,
+              95,
+              97,
+              116,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              54,
+              45,
+              48,
+              51,
+              45,
+              49,
+              52,
+              84,
+              49,
+              48,
+              58,
+              52,
+              54,
+              58,
+              51,
+              49,
+              46,
+              55,
+              54,
+              56,
+              48,
+              50,
+              90,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              115,
+              101,
+              110,
+              116,
+              34,
+              125,
+              44,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              55,
+              49,
+              44,
+              34,
+              117,
+              115,
+              101,
+              114,
+              95,
+              105,
+              100,
+              34,
+              58,
+              34,
+              51,
+              51,
+              34,
+              44,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              102,
+              105,
+              110,
+              97,
+              108,
+              95,
+              116,
+              101,
+              115,
+              116,
+              64,
+              101,
+              120,
+              97,
+              109,
+              112,
+              108,
+              101,
+              46,
+              99,
+              111,
+              109,
+              34,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              208,
+              151,
+              208,
+              176,
+              208,
+              186,
+              208,
+              176,
+              208,
+              183,
+              32,
+              54,
+              52,
+              32,
+              209,
+              131,
+              209,
+              129,
+              208,
+              191,
+              208,
+              181,
+              209,
+              136,
+              208,
+              189,
+              208,
+              190,
+              32,
+              208,
+              190,
+              209,
+              132,
+              208,
+              190,
+              209,
+              128,
+              208,
+              188,
+              208,
+              187,
+              208,
+              181,
+              208,
+              189,
+              33,
+              32,
+              208,
+              161,
+              208,
+              191,
+              208,
+              176,
+              209,
+              129,
+              208,
+              184,
+              208,
+              177,
+              208,
+              190,
+              32,
+              208,
+              183,
+              208,
+              176,
+              32,
+              208,
+              191,
+              208,
+              190,
+              208,
+              186,
+              209,
+              131,
+              208,
+              191,
+              208,
+              186,
+              209,
+              131,
+              33,
+              34,
+              44,
+              34,
+              99,
+              114,
+              101,
+              97,
+              116,
+              101,
+              100,
+              95,
+              97,
+              116,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              54,
+              45,
+              48,
+              51,
+              45,
+              49,
+              52,
+              84,
+              49,
+              48,
+              58,
+              52,
+              54,
+              58,
+              51,
+              49,
+              46,
+              55,
+              52,
+              55,
+              50,
+              54,
+              90,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              115,
+              101,
+              110,
+              116,
+              34,
+              125,
+              93,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 36,
+          "responseSize": 412
+        },
+        "id": "361963fb-9d07-42fa-8b05-9b8b297957fd",
+        "testScript": [
+          {
+            "error": {
+              "type": "Error",
+              "name": "SyntaxError",
+              "message": "Identifier 'data' has already been declared",
+              "checksum": "36a30bff55cab1108d3140517a1e4348",
+              "id": "42f25dc4-c310-4b0c-ac2e-9ba0bf76f22d",
+              "timestamp": 1773485214812,
+              "stacktrace": []
+            }
+          }
+        ]
+      }
+    ],
+    "transfers": {
+      "responseTotal": 443
+    },
+    "failures": [
+      {
+        "error": {
+          "type": "Error",
+          "name": "SyntaxError",
+          "message": "Identifier 'data' has already been declared",
+          "checksum": "36a30bff55cab1108d3140517a1e4348",
+          "id": "18902248-128d-4171-885f-69fe02a151f1",
+          "timestamp": 1773485214751,
+          "stacktrace": []
+        },
+        "at": "test-script",
+        "source": {
+          "id": "de9905f2-651c-4534-a650-76182154e467",
+          "name": "Check Balance",
+          "request": {
+            "url": {
+              "path": [
+                "accounts",
+                "33"
+              ],
+              "host": [
+                "{{billingUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "11f7f97c-8ae4-4d13-8008-7eaa6a21aa5b",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "const data = pm.response.json();",
+                  "pm.test(\"Balance 100\", () => pm.expect(data.balance).to.equal(100));"
+                ],
+                "_lastExecutionId": "e338e06e-07e7-48f7-b714-9790ee0875d2"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "item": [
+            {
+              "id": "de9905f2-651c-4534-a650-76182154e467",
+              "name": "Check Balance",
+              "request": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "33"
+                  ],
+                  "host": [
+                    "{{billingUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "11f7f97c-8ae4-4d13-8008-7eaa6a21aa5b",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                      "const data = pm.response.json();",
+                      "pm.test(\"Balance 100\", () => pm.expect(data.balance).to.equal(100));"
+                    ],
+                    "_lastExecutionId": "e338e06e-07e7-48f7-b714-9790ee0875d2"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "361963fb-9d07-42fa-8b05-9b8b297957fd",
+              "name": "Check Notifications",
+              "request": {
+                "url": {
+                  "path": [
+                    "notifications"
+                  ],
+                  "host": [
+                    "{{notificationUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_id",
+                      "value": "33"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "c3cbcb4e-71aa-468d-8631-f8c8504e9573",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                      "const data = pm.response.json() || [];",
+                      "console.log(\"Notifications:\", JSON.stringify(data, null, 2));",
+                      "",
+                      "const hasSuccess = data.some(n => n.message && n.message.includes('успешно'));",
+                      "const hasFail = data.some(n => n.message && n.message.includes('недостаточно'));",
+                      "",
+                      "pm.test(\"Has success notification\", () => pm.expect(hasSuccess).to.be.true);",
+                      "pm.test(\"Has fail notification\", () => pm.expect(hasFail).to.be.true);",
+                      "",
+                      "console.log(\"✅ Success:\", hasSuccess);",
+                      "console.log(\"✅ Fail:\", hasFail);"
+                    ],
+                    "_lastExecutionId": "0fa7bd5b-b35a-46aa-9847-e599a528803d"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [
+            {
+              "type": "any",
+              "value": "localhost:8083",
+              "key": "billingUrl"
+            },
+            {
+              "type": "any",
+              "value": "localhost:8084",
+              "key": "notificationUrl"
+            }
+          ],
+          "info": {
+            "_postman_id": "eaf02bf1-d9d1-4039-9204-d1e065e7ea6e",
+            "name": "Final Test",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 2,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "250d9010-7253-46cd-bcf0-02c0f7578da6",
+          "httpRequestId": "2c8df365-e590-456b-9e15-a60db443a04b",
+          "scriptId": "11f7f97c-8ae4-4d13-8008-7eaa6a21aa5b"
+        }
+      },
+      {
+        "error": {
+          "type": "Error",
+          "name": "SyntaxError",
+          "message": "Identifier 'data' has already been declared",
+          "checksum": "36a30bff55cab1108d3140517a1e4348",
+          "id": "42f25dc4-c310-4b0c-ac2e-9ba0bf76f22d",
+          "timestamp": 1773485214812,
+          "stacktrace": []
+        },
+        "at": "test-script",
+        "source": {
+          "id": "361963fb-9d07-42fa-8b05-9b8b297957fd",
+          "name": "Check Notifications",
+          "request": {
+            "url": {
+              "path": [
+                "notifications"
+              ],
+              "host": [
+                "{{notificationUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "33"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "c3cbcb4e-71aa-468d-8631-f8c8504e9573",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "const data = pm.response.json() || [];",
+                  "console.log(\"Notifications:\", JSON.stringify(data, null, 2));",
+                  "",
+                  "const hasSuccess = data.some(n => n.message && n.message.includes('успешно'));",
+                  "const hasFail = data.some(n => n.message && n.message.includes('недостаточно'));",
+                  "",
+                  "pm.test(\"Has success notification\", () => pm.expect(hasSuccess).to.be.true);",
+                  "pm.test(\"Has fail notification\", () => pm.expect(hasFail).to.be.true);",
+                  "",
+                  "console.log(\"✅ Success:\", hasSuccess);",
+                  "console.log(\"✅ Fail:\", hasFail);"
+                ],
+                "_lastExecutionId": "0fa7bd5b-b35a-46aa-9847-e599a528803d"
+              }
+            }
+          ]
+        },
+        "parent": {
+          "item": [
+            {
+              "id": "de9905f2-651c-4534-a650-76182154e467",
+              "name": "Check Balance",
+              "request": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    "33"
+                  ],
+                  "host": [
+                    "{{billingUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "11f7f97c-8ae4-4d13-8008-7eaa6a21aa5b",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                      "const data = pm.response.json();",
+                      "pm.test(\"Balance 100\", () => pm.expect(data.balance).to.equal(100));"
+                    ],
+                    "_lastExecutionId": "e338e06e-07e7-48f7-b714-9790ee0875d2"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "361963fb-9d07-42fa-8b05-9b8b297957fd",
+              "name": "Check Notifications",
+              "request": {
+                "url": {
+                  "path": [
+                    "notifications"
+                  ],
+                  "host": [
+                    "{{notificationUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_id",
+                      "value": "33"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "c3cbcb4e-71aa-468d-8631-f8c8504e9573",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                      "const data = pm.response.json() || [];",
+                      "console.log(\"Notifications:\", JSON.stringify(data, null, 2));",
+                      "",
+                      "const hasSuccess = data.some(n => n.message && n.message.includes('успешно'));",
+                      "const hasFail = data.some(n => n.message && n.message.includes('недостаточно'));",
+                      "",
+                      "pm.test(\"Has success notification\", () => pm.expect(hasSuccess).to.be.true);",
+                      "pm.test(\"Has fail notification\", () => pm.expect(hasFail).to.be.true);",
+                      "",
+                      "console.log(\"✅ Success:\", hasSuccess);",
+                      "console.log(\"✅ Fail:\", hasFail);"
+                    ],
+                    "_lastExecutionId": "0fa7bd5b-b35a-46aa-9847-e599a528803d"
+                  }
+                }
+              ]
+            }
+          ],
+          "event": [],
+          "variable": [
+            {
+              "type": "any",
+              "value": "localhost:8083",
+              "key": "billingUrl"
+            },
+            {
+              "type": "any",
+              "value": "localhost:8084",
+              "key": "notificationUrl"
+            }
+          ],
+          "info": {
+            "_postman_id": "eaf02bf1-d9d1-4039-9204-d1e065e7ea6e",
+            "name": "Final Test",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+          }
+        },
+        "cursor": {
+          "ref": "4d925187-c8e0-4c99-b903-b68bd81fc37c",
+          "length": 2,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "1dee2e28-79a1-4ce7-83d3-c935563545c1",
+          "scriptId": "c3cbcb4e-71aa-468d-8631-f8c8504e9573"
+        }
+      }
+    ],
+    "error": null
+  }
+}

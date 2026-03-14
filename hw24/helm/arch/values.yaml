@@ -1,0 +1,80 @@
+global:
+  namespace: arch-homework
+  tag: v3
+
+user:
+  replicaCount: 1
+  image: a1ekseyramblerru/user-service:v3
+  imagePullPolicy: IfNotPresent
+  service:
+    port: 8080
+    type: ClusterIP
+  env:
+    - name: SERVICE_NAME
+      value: user
+
+order:
+  replicaCount: 1
+  image: a1ekseyramblerru/order-service:v3
+  imagePullPolicy: IfNotPresent
+  service:
+    port: 8080
+    type: ClusterIP
+  env:
+    - name: SERVICE_NAME
+      value: order
+    - name: BILLING_SERVICE_URL
+      value: http://billing-service:8080
+    - name: NOTIFICATION_SERVICE_URL
+      value: http://notification-service:8080
+
+billing:
+  replicaCount: 1
+  image: a1ekseyramblerru/billing-service:v3
+  imagePullPolicy: IfNotPresent
+  service:
+    port: 8080
+    type: ClusterIP
+  env:
+    - name: SERVICE_NAME
+      value: billing
+
+notification:
+  replicaCount: 1
+  image: a1ekseyramblerru/notification-service:v3
+  imagePullPolicy: IfNotPresent
+  service:
+    port: 8080
+    type: ClusterIP
+  env:
+    - name: SERVICE_NAME
+      value: notification
+    - name: DB_HOST
+      value: postgres-notification
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_NAME
+      value: notifications
+    - name: DB_USER
+      value: notification_user
+    - name: DB_PASSWORD
+      value: "notification_password"
+
+postgres:
+  replicaCount: 1
+  image: postgres:15-alpine
+  imagePullPolicy: IfNotPresent
+  service:
+    port: 5432
+    type: ClusterIP
+  database:
+    name: notifications
+    user: notification_user
+    password: "notification_password"
+
+ingress:
+  enabled: false
+  host: arch.homework
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /

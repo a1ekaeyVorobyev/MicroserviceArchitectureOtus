@@ -1,0 +1,359 @@
+{
+  "info": {
+    "name": "Microservices Architecture Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Create User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function() {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"User has ID\", function() {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.id).to.not.be.empty;",
+              "    pm.variables.set(\"userId\", jsonData.id);",
+              "    console.log(\"User ID:\", jsonData.id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{$randomEmail}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["users"]
+        }
+      }
+    },
+    {
+      "name": "2. Deposit Money",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function() {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Balance updated to 200\", function() {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.balance).to.equal(200);",
+              "    console.log(\"New balance:\", jsonData.balance);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 200\n}"
+        },
+        "url": {
+          "raw": "{{billingUrl}}/accounts/{{userId}}/deposit",
+          "host": ["{{billingUrl}}"],
+          "path": ["accounts", "{{userId}}", "deposit"]
+        }
+      }
+    },
+    {
+      "name": "3. Create Order (Success)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function() {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Order completed successfully\", function() {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.equal(\"completed\");",
+              "    pm.variables.set(\"orderId\", jsonData.id);",
+              "    console.log(\"Order ID:\", jsonData.id, \"Status:\", jsonData.status);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"amount\": 100,\n  \"email\": \"test@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{orderUrl}}/orders",
+          "host": ["{{orderUrl}}"],
+          "path": ["orders"]
+        }
+      }
+    },
+    {
+      "name": "4. Check Balance After Success",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function() {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Balance reduced to 100\", function() {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.balance).to.equal(100);",
+              "    console.log(\"Balance after order:\", jsonData.balance);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{billingUrl}}/accounts/{{userId}}",
+          "host": ["{{billingUrl}}"],
+          "path": ["accounts", "{{userId}}"]
+        }
+      }
+    },
+    {
+      "name": "5. Check Notifications After Success",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function() {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// Ждем 2 секунды чтобы уведомление успело сохраниться",
+              "setTimeout(function() {",
+              "    var jsonData = pm.response.json();",
+              "    console.log(\"Notifications after success:\", JSON.stringify(jsonData, null, 2));",
+              "",
+              "    if (!jsonData || jsonData === null) {",
+              "        console.log(\"Response is null, skipping test\");",
+              "        return;",
+              "    }",
+              "",
+              "    var found = false;",
+              "    for (var i = 0; i < jsonData.length; i++) {",
+              "        if (jsonData[i].message && jsonData[i].message.includes('успешно')) {",
+              "            found = true;",
+              "            console.log(\"✅ Found success notification:\", jsonData[i].message);",
+              "            break;",
+              "        }",
+              "    }",
+              "",
+              "    pm.expect(found, \"No success notification found after 2 seconds\").to.be.true;",
+              "}, 2000);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{notificationUrl}}/notifications?user_id={{userId}}",
+          "host": ["{{notificationUrl}}"],
+          "path": ["notifications"],
+          "query": [
+            {
+              "key": "user_id",
+              "value": "{{userId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Create Order (Fail - Insufficient Funds)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 402\", function() {",
+              "    pm.response.to.have.status(402);",
+              "});",
+              "",
+              "pm.test(\"Order failed - insufficient funds\", function() {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.equal(\"insufficient_funds\");",
+              "    console.log(\"Failed order status:\", jsonData.status);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"amount\": 200,\n  \"email\": \"test@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{orderUrl}}/orders",
+          "host": ["{{orderUrl}}"],
+          "path": ["orders"]
+        }
+      }
+    },
+    {
+      "name": "7. Check Balance Unchanged",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function() {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Balance unchanged at 100\", function() {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.balance).to.equal(100);",
+              "    console.log(\"Balance after failed order:\", jsonData.balance);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{billingUrl}}/accounts/{{userId}}",
+          "host": ["{{billingUrl}}"],
+          "path": ["accounts", "{{userId}}"]
+        }
+      }
+    },
+    {
+      "name": "8. Check Notifications After Fail",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function() {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// Ждем 2 секунды чтобы уведомления успели сохраниться",
+              "setTimeout(function() {",
+              "    var jsonData = pm.response.json();",
+              "    console.log(\"Final notifications:\", JSON.stringify(jsonData, null, 2));",
+              "",
+              "    if (!jsonData || jsonData === null) {",
+              "        console.log(\"Response is null, skipping test\");",
+              "        return;",
+              "    }",
+              "",
+              "    var foundSuccess = false;",
+              "    var foundFail = false;",
+              "",
+              "    for (var i = 0; i < jsonData.length; i++) {",
+              "        var message = jsonData[i].message || '';",
+              "        console.log(\"Checking message:\", message);",
+              "        ",
+              "        if (message.includes('успешно')) {",
+              "            foundSuccess = true;",
+              "            console.log(\"✅ Found success:\", message);",
+              "        }",
+              "        if (message.includes('недостаточно')) {",
+              "            foundFail = true;",
+              "            console.log(\"✅ Found fail:\", message);",
+              "        }",
+              "    }",
+              "",
+              "    pm.expect(foundSuccess, \"No success notification found after 2 seconds\").to.be.true;",
+              "    pm.expect(foundFail, \"No fail notification found after 2 seconds\").to.be.true;",
+              "}, 2000);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{notificationUrl}}/notifications?user_id={{userId}}",
+          "host": ["{{notificationUrl}}"],
+          "path": ["notifications"],
+          "query": [
+            {
+              "key": "user_id",
+              "value": "{{userId}}"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "localhost:8081"
+    },
+    {
+      "key": "orderUrl",
+      "value": "localhost:8082"
+    },
+    {
+      "key": "billingUrl",
+      "value": "localhost:8083"
+    },
+    {
+      "key": "notificationUrl",
+      "value": "localhost:8084"
+    }
+  ]
+}

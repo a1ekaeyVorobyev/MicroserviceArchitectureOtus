@@ -1,0 +1,29 @@
+{
+  "name": "arch-env-local",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "localhost:8081",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "orderUrl",
+      "value": "localhost:8082",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "billingUrl",
+      "value": "localhost:8083",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "notificationUrl",
+      "value": "localhost:8084",
+      "type": "default",
+      "enabled": true
+    }
+  ]
+}
